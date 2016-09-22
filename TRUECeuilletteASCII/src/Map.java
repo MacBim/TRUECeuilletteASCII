@@ -38,6 +38,7 @@ public class Map {
 				System.out.println(x+" | "+y+"\n");
 				asciiMap += this.content[x][y];
 			}
+			
 			asciiMap += '\n';
 		}
 		return asciiMap;
