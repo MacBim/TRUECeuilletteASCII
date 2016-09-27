@@ -10,8 +10,18 @@ public class main {
 		List list = (List) parser.parse("W:/git/TRUECeuilletteASCII/TRUECeuilletteASCII/src/map.txt");
 
 		// TODO Auto-generated method stub
-		Map map = new Map(list);
-		System.out.println(map.drawMap());
+		GameIA gameIA = new GameIA(list);
+		Agent agent = new Agent(new Position(0, 3));
+		gameIA.putAgent(agent);
+		System.out.println(gameIA.drawMap());
+		// ***********************************//
+		agent.moveAgent(gameIA, new Position(0,9));
+		System.out.println(gameIA.drawMap());
+		for(int i=0;i<3;i++){
+			agent.moveAgentRandom(gameIA);
+			System.out.println(gameIA.drawMap());
+		}
+
 	}
 
 }
