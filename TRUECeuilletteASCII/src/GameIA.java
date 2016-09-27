@@ -6,6 +6,7 @@ import java.util.List;
 public class GameIA {
 	
 	String[][] content;
+	public int nbPatch;
 	
 	public GameIA(List mapContent){
 		for (int i = 0; i < mapContent.size(); i++) {
@@ -15,12 +16,9 @@ public class GameIA {
 			} else {
 				Position tmp = (Position) mapContent.get(i);
 				this.content[tmp.getX()][tmp.getY()] = "|*";
+				this.nbPatch++;
 			}
 		}
-		/**
-		 * pour chaque agent, le placer dans le tableau content
-		 * pareil pour les patch
-		 */
 	}
 
 	public GameIA(int size, Agent[] agents, InterestPatch[] patchs){
@@ -36,11 +34,9 @@ public class GameIA {
 		String asciiMap = "";
 		for(int y=0; y<this.content.length;y++){
 			for(int x=0; x<this.content.length;x++){
-//				System.out.println(x+" | "+y+"\n");
 				if(this.content[x][y]==null){
 					asciiMap += "| ";
 				} else {
-//					System.out.println("("+x+","+y+")");
 					asciiMap += this.content[x][y];
 				}
 			}
@@ -51,12 +47,13 @@ public class GameIA {
 	}
 	
 	void putAgent(Agent agent){
-		Position posAgent= agent.getPosition();
+		Position posAgent = agent.getPosition();
 		int x = posAgent.getX();
 		int y = posAgent.getY();
 		if(this.content[x][y] != "|*"){
 			this.content[x][y] = "|@";
 		} else {
+			this.nbPatch--;
 			this.content[x][y] = "|X";
 		}
 	}

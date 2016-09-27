@@ -21,7 +21,7 @@ public class Agent {
 		this.position = position;
 	}
 	
-	void moveAgent(GameIA gameIA, Position pos){
+	void move(GameIA gameIA, Position pos){
 		Position oldPos = this.getPosition();
 		gameIA.content[oldPos.getX()][oldPos.getY()] = "| ";
 		this.setPosition(pos);
@@ -30,11 +30,15 @@ public class Agent {
 		gameIA.putAgent(this);
 	}
 	
-	void moveAgentRandom(GameIA gameIA){
+	void moveRandom(GameIA gameIA){
 		Random randomGenerator = new Random();
-		int xRandom = randomGenerator.nextInt(10);
-		int yRandom = randomGenerator.nextInt(10);
+		int xRandom = randomGenerator.nextInt(100);
+		int yRandom = randomGenerator.nextInt(100);
 		Position randomPosition = new Position(xRandom, yRandom);
-		this.moveAgent(gameIA, randomPosition);
+		this.move(gameIA, randomPosition);
+	}
+	
+	void moveLevy(GameIA gameIA){
+		//TODO levy
 	}
 }

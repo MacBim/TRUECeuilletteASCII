@@ -1,8 +1,6 @@
 import java.util.List;
 import java.io.IOException;
 
-
-
 public class main {
 
 	public static void main(String[] args) throws IOException {
@@ -13,21 +11,24 @@ public class main {
 
 		// TODO Auto-generated method stub
 		GameIA gameIA = new GameIA(list);
-		Agent agent = new Agent(new Position(0, 3));
-		gameIA.putAgent(agent);
-		ui.texteArea.setText(gameIA.drawMap());
+		Agent agent1 = new Agent(new Position(0, 3));
+		Agent agent2 = new Agent(new Position(0, 3));
+		gameIA.putAgent(agent1);
+		gameIA.putAgent(agent2);
+		ui.texteAreaPrimary.setText(gameIA.drawMap());
 		// ***********************************//
-		agent.moveAgent(gameIA, new Position(0,9));
-		for(int i=0;i<150;i++){
-			agent.moveAgentRandom(gameIA);
+		while(gameIA.nbPatch != 0){
+			agent1.moveRandom(gameIA);
+			agent2.moveRandom(gameIA);
 			try {
 			    Thread.sleep(250);                 //1000 milliseconds is one second.
 			} catch(InterruptedException ex) {
 			    Thread.currentThread().interrupt();
 			}
-			ui.texteArea.setText(gameIA.drawMap());
+			ui.texteAreaPrimary.setText(gameIA.drawMap());
+			
 		}
-
+		ui.texteAreaSecondary.setText("DONE");
 	}
 
 }
