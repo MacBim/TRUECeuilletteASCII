@@ -14,7 +14,7 @@ public class Map {
 				this.content = new String[size][size];
 			} else {
 				Position tmp = (Position) mapContent.get(i);
-				this.content[tmp.getX()][tmp.getY()] = " * ";
+				this.content[tmp.getX()][tmp.getY()] = "|*";
 			}
 		}
 		/**
@@ -38,14 +38,13 @@ public class Map {
 			for(int y=0; y<this.content.length;y++){
 //				System.out.println(x+" | "+y+"\n");
 				if(this.content[x][y]==null){
-					asciiMap += " ";
+					asciiMap += "| ";
 				} else {
 					asciiMap += this.content[x][y];
 				}
-				
 			}
+			asciiMap += "|\n";
 			
-			asciiMap += '\n';
 		}
 		return asciiMap;
 	}
