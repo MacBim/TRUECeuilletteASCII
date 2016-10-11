@@ -1,60 +1,58 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 
 public class GameIA {
-	
-	String[][] content;
+
+	private static final Color PATCH = Color.GREEN;
+	private static final Color AGENT = Color.RED;
+	private static final Color PATCH_FOUND = Color.YELLOW;
+	private int size;
+
 	public int nbPatch;
-	
-	public GameIA(List mapContent){
+
+	public GameIA(List mapContent, UIv2 ui){
 		for (int i = 0; i < mapContent.size(); i++) {
 			if(i==0){
-				int size = (int) mapContent.get(i);
-				this.content = new String[size][size];
+				this.size = (int) mapContent.get(i);
 			} else {
 				Position tmp = (Position) mapContent.get(i);
-				this.content[tmp.getX()][tmp.getY()] = "|*";
+				IDrawable patch = new RectangleDrawable(PATCH, new Position(tmp.X*10, tmp.Y*10), new Dimension(10, 10));
+				ui.addDrawable(patch);
 				this.nbPatch++;
 			}
 		}
 	}
 
-	public GameIA(int size, Agent[] agents, InterestPatch[] patchs){
-		this.content = new String[size][size];
+	void putAgent(Agent agent, UIv2 ui, Position oldPos){
+		Position posAgent = agent.getPosition();
+		System.out.println(posAgent.X+"  "+posAgent.Y);
+		IDrawable agentRect = new RectangleDrawable(AGENT, posAgent, new Dimension(10, 10));
+		FormDrawable form = (FormDrawable) agentRect;
 		
-		/**
-		 * pour chaque agent, le placer dans le tableau content
-		 * pareil pour les patch
-		 */
-	}
-	
-	String drawMap(){
-		String asciiMap = "";
-		for(int y=0; y<this.content.length;y++){
-			for(int x=0; x<this.content.length;x++){
-				if(this.content[x][y]==null){
-					asciiMap += "| ";
-				} else {
-					asciiMap += this.content[x][y];
+		if(ui.isFree(form.getRectangle())){
+			ui.addDrawable(agentRect);
+		} else {
+			List l = ui.findDrawables(posAgent);
+			if(!l.isEmpty()){
+				for(int i = 0;i<l.size();i++){
+					FormDrawable var = (FormDrawable) l.get(i);
+					if(var.color != AGENT){
+						ui.removeDrawable((IDrawable) l.get(i));
+						this.nbPatch--;
+						System.out.println("Patchs : "+this.nbPatch);
+					}
 				}
 			}
-			asciiMap += "|\n";
-			
 		}
-		return asciiMap;
+
 	}
-	
-	void putAgent(Agent agent){
-		Position posAgent = agent.getPosition();
-		int x = posAgent.getX();
-		int y = posAgent.getY();
-		if(this.content[x][y] != "|*"){
-			this.content[x][y] = "|@";
-		} else {
-			this.nbPatch--;
-			this.content[x][y] = "|X";
-		}
+
+	public int getSize(){
+		return this.size;
 	}
 }
