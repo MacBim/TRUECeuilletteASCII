@@ -29,13 +29,15 @@ public class Agent {
 	}
 	
 	void moveRandom(GameIA gameIA, UIv2 ui){
+		Position oldPos = this.position;
 		Random randomGenerator = new Random();
 		int xRandom = randomGenerator.nextInt(gameIA.getSize()*10);
 		int yRandom = randomGenerator.nextInt(gameIA.getSize()*10);
 		Position randomPosition = new Position(xRandom, yRandom);
 		this.position = randomPosition;
-		move(gameIA, randomPosition, ui);
-		//gameIA.putAgent(this, ui, true);
+		
+		//move(gameIA, randomPosition, ui);
+		gameIA.putAgent(this, ui, oldPos);
 	}
 	int getLevyNumber(float alpha){
 		Random rand = new Random();
@@ -61,15 +63,38 @@ public class Agent {
     }
 	
 	void moveLevy(GameIA gameIA,float alpha,UIv2 ui){
-		int x = this.getLevyNumber(alpha);
-		int y = this.getLevyNumber(alpha);
-		Position oldPos = this.position;
+		int distanceToJump = this.getLevyNumber(alpha);
+		//System.out.println("distance : "+distanceToJump);
+		
+		Random rand = new Random();
+		int angle = rand.nextInt(360);
+		
+		int radAngle = (int) Math.round(angle * Math.PI/180);
+		//System.out.println("radangle : "+radAngle);
+		
+		int newX = (int) Math.round((Math.cos(radAngle)/distanceToJump)*100 + this.position.X);
+		if(newX < 0){
+			newX = 0;
+		}
+		if(newX > gameIA.getSize()*gameIA.SCALE){
+			newX = gameIA.getSize()*gameIA.SCALE;
+		}
+		int newY = (int) Math.round((Math.sin(radAngle)/distanceToJump)*100 + this.position.Y);
+		if(newY < 0){
+			newY = 0;
+		}
+		if(newY > gameIA.getSize()*gameIA.SCALE){
+			newY = gameIA.getSize()*gameIA.SCALE;
+		}
+		//System.out.println("x : "+newX+"  y : "+newY);
+		Position oldPostion = this.position;
+		Position newPosition = new Position(newX, newY);
+		
+		this.setPosition(newPosition);
 		//System.out.println("x : "+this.position.getX()+"+"+x+"  y : "+this.position.getY()+"+"+y);
 		//System.out.println("x : "+mod(this.position.getX()+x,gameIA.content.length)+"  y : "+mod(this.position.getY()+y,gameIA.content.length));
-
-		this.position.setX(mod(this.position.getX()+x,gameIA.getSize()*10));
-		this.position.setY(mod(this.position.getY()+y,gameIA.getSize()*10));
 		//System.out.println("x : "+this.position.X+"  y : "+this.position.Y);
-		gameIA.putAgent(this,ui,oldPos);
+		
+		gameIA.putAgent(this,ui,oldPostion);
 	}
 }

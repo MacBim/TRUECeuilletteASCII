@@ -10,7 +10,9 @@ public class GameIA {
 
 	private static final Color PATCH = Color.GREEN;
 	private static final Color AGENT = Color.RED;
+	private static final Color MULTIPLE_AGENTS = Color.BLUE;
 	private static final Color PATCH_FOUND = Color.YELLOW;
+	public static final int SCALE = 10;
 	private int size;
 
 	public int nbPatch;
@@ -29,8 +31,21 @@ public class GameIA {
 	}
 
 	void putAgent(Agent agent, UIv2 ui, Position oldPos){
+		
+		if(oldPos != null){
+			List ltmp = ui.findDrawables(oldPos);
+			if(ltmp == null){
+				System.out.println("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLL");
+			}
+			for(int i = 0; i < ltmp.size(); i++){
+				FormDrawable form = (FormDrawable) ltmp.get(i);
+				ui.removeDrawable(form);
+			}
+		}
+		
+		
 		Position posAgent = agent.getPosition();
-		System.out.println(posAgent.X+"  "+posAgent.Y);
+		//System.out.println(posAgent.X+"  "+posAgent.Y);
 		IDrawable agentRect = new RectangleDrawable(AGENT, posAgent, new Dimension(10, 10));
 		FormDrawable form = (FormDrawable) agentRect;
 		
@@ -41,10 +56,15 @@ public class GameIA {
 			if(!l.isEmpty()){
 				for(int i = 0;i<l.size();i++){
 					FormDrawable var = (FormDrawable) l.get(i);
-					if(var.color != AGENT){
+					if(var.color == PATCH){
+						IDrawable patchFound = new RectangleDrawable(PATCH_FOUND, ((FormDrawable) l.get(i)).pos, new Dimension(10,10));
+						ui.addDrawable(patchFound);
 						ui.removeDrawable((IDrawable) l.get(i));
 						this.nbPatch--;
-						System.out.println("Patchs : "+this.nbPatch);
+						System.out.println("####Patchs : "+this.nbPatch+" ######");
+					} else {
+						IDrawable multipleAgent = new RectangleDrawable(MULTIPLE_AGENTS, ((FormDrawable) l.get(i)).pos, new Dimension(10,10));
+						ui.addDrawable(multipleAgent);
 					}
 				}
 			}

@@ -17,5 +17,9 @@ public class RectangleDrawable extends FormDrawable{
 		g.fillRect(rect.x,rect.y,rect.height,rect.width);
 		g.setColor(c);
 	}
+	
+	public Position getPosition(){
+		return this.pos;
+	}
 
 }

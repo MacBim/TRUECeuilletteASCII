@@ -37,10 +37,10 @@ public class main {
 //		// ***********************************//
 		while(gameIA.nbPatch != 0){
 			for(int i = 0;i<nbAgent;i++){
-				//agents[i].moveLevy(gameIA,(float) 1,ui);
-				agents[i].moveRandom(gameIA,ui);
+				agents[i].moveLevy(gameIA,(float) 1,ui);
+				//agents[i].moveRandom(gameIA,ui);
 				try {
-					Thread.sleep(250);
+					Thread.sleep(25);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -48,6 +48,9 @@ public class main {
 			}
 			nbTour++;
 		}
+//		JOptionPane lastPane = new JOptionPane();
+//		lastPane.showMessageDialog(tmpFrame, "Nombre de tours = "+nbTour);
+		System.out.println("Nombre de tours = "+nbTour);
 	}
 
 }

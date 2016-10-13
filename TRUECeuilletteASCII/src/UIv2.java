@@ -13,8 +13,13 @@ public class UIv2 extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 		for (Iterator iter = drawables.iterator(); iter.hasNext();) {
-			IDrawable d = (IDrawable) iter.next();
-			d.draw(g);	
+			try{
+				IDrawable d = (IDrawable) iter.next();
+				d.draw(g);
+			} catch(Exception e){
+				//System.out.println("YOLO YA UNE ERREUR LOL");
+			}
+				
 		}
 	}
 	
@@ -49,9 +54,4 @@ public class UIv2 extends JPanel {
 		drawables.remove(d);
 		repaint();
 	}
-	
-	public void removeLast(){
-		drawables.remove(drawables.size()-1);
-	}
-
 }
