@@ -4,6 +4,9 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+
+import javax.swing.JOptionPane;
 
 
 public class GameIA {
@@ -74,5 +77,41 @@ public class GameIA {
 
 	public int getSize(){
 		return this.size;
+	}
+	
+	public void lauchgame(GameWindow window){
+		UIv2 windowUI = (UIv2) window.getUI();
+		CommandPanel commandPanel = window.getCommandePanel();
+		int nbAgent = commandPanel.getAgents();
+		float alpha = (commandPanel.getAlpha()) / 10;
+		
+		System.out.println("Nombre agents " +nbAgent);
+		
+		Agent[] agents = new Agent[nbAgent];
+		Random randomGenerator = new Random();
+		for(int i = 0;i<nbAgent;i++){
+			int xRandom = randomGenerator.nextInt(this.getSize()*10);
+			int yRandom = randomGenerator.nextInt(this.getSize()*10);
+			agents[i] = new Agent(new Position(xRandom, yRandom));
+			this.putAgent(agents[i], windowUI,null);
+		}
+		int nbTour = 0;
+
+		commandPanel.setEnabled(false);
+		while(this.nbPatch != 0){
+			for(int i = 0;i<nbAgent;i++){
+				agents[i].moveLevy(this,alpha,windowUI);
+				//agents[i].moveRandom(gameIA,ui);
+				try {
+					Thread.sleep(25);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			nbTour++;
+		}
+		commandPanel.setEnabled(true);
+		System.out.println("Nombre de tours = "+nbTour);
 	}
 }
