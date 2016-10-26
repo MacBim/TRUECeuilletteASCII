@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 import javax.swing.*;
 
-public class UIv2 extends JPanel {
+public class UIv2 extends JPanel{
 	
 	private List drawables = new LinkedList();
 	
@@ -16,6 +16,7 @@ public class UIv2 extends JPanel {
 			try{
 				IDrawable d = (IDrawable) iter.next();
 				d.draw(g);
+				validate();
 			} catch(Exception e){
 				//System.out.println("YOLO YA UNE ERREUR LOL");
 			}
@@ -54,4 +55,5 @@ public class UIv2 extends JPanel {
 		drawables.remove(d);
 		repaint();
 	}
+
 }

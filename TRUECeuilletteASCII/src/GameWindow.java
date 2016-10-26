@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
@@ -7,7 +8,7 @@ public class GameWindow extends JFrame {
 	
 	private int size;
 	private CommandPanel commandPanel;
-	private JPanel ui;
+	private UIv2 ui;
 	
 	public GameWindow(int size){
 		
@@ -19,7 +20,7 @@ public class GameWindow extends JFrame {
 		this.size = size;
 		
 		this.ui = new UIv2();
-		
+		this.ui.setBackground(Color.WHITE);
 		this.commandPanel = new CommandPanel();
 		
 		this.getContentPane().add(this.ui);
@@ -35,7 +36,12 @@ public class GameWindow extends JFrame {
 		return this.commandPanel;
 	}
 	
-	public JPanel getUI(){
+	public UIv2 getUI(){
 		return this.ui;
+	}
+	
+	public void update() {
+		this.revalidate();
+		this.repaint();
 	}
 }

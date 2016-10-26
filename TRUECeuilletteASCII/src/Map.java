@@ -23,15 +23,7 @@ public class Map {
 		 */
 	}
 
-	public Map(int size, Agent[] agents, InterestPatch[] patchs){
-		this.content = new String[size][size];
-		
-		/**
-		 * pour chaque agent, le placer dans le tableau content
-		 * pareil pour les patch
-		 */
-	}
-	
+
 	String drawMap(){
 		String asciiMap = "";
 		for(int x=0; x<this.content.length;x++){

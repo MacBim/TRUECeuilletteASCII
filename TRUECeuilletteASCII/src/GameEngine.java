@@ -9,18 +9,21 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 
-public class GameIA {
+public class GameEngine{
 
 	private static final Color PATCH = Color.GREEN;
 	private static final Color AGENT = Color.RED;
 	private static final Color MULTIPLE_AGENTS = Color.BLUE;
 	private static final Color PATCH_FOUND = Color.YELLOW;
 	public static final int SCALE = 10;
+	private GameWindow gameWindow;
 	private int size;
 
 	public int nbPatch;
-
-	public GameIA(List mapContent, UIv2 ui){
+	public int nbTours;
+	
+	public GameEngine(List mapContent, UIv2 ui, GameWindow gameWindow){
+		this.gameWindow = gameWindow;
 		for (int i = 0; i < mapContent.size(); i++) {
 			if(i==0){
 				this.size = (int) mapContent.get(i);
@@ -114,4 +117,5 @@ public class GameIA {
 		commandPanel.setEnabled(true);
 		System.out.println("Nombre de tours = "+nbTour);
 	}
+
 }
