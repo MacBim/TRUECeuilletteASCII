@@ -63,13 +63,13 @@ public class GameEngine{
 				for(int i = 0;i<l.size();i++){
 					FormDrawable var = (FormDrawable) l.get(i);
 					if(var.color == PATCH){
-						IDrawable patchFound = new RectangleDrawable(PATCH_FOUND, ((FormDrawable) l.get(i)).pos, new Dimension(10,10));
+						IDrawable patchFound = new RectangleDrawable(PATCH_FOUND, (var).pos, new Dimension(10,10));
 						ui.addDrawable(patchFound);
-						ui.removeDrawable((IDrawable) l.get(i));
+						ui.removeDrawable(var);
 						this.nbPatch--;
 						System.out.println("####Patchs : "+this.nbPatch+" ######");
 					} else {
-						IDrawable multipleAgent = new RectangleDrawable(MULTIPLE_AGENTS, ((FormDrawable) l.get(i)).pos, new Dimension(10,10));
+						IDrawable multipleAgent = new RectangleDrawable(MULTIPLE_AGENTS, (var).pos, new Dimension(10,10));
 						ui.addDrawable(multipleAgent);
 					}
 				}
