@@ -54,8 +54,9 @@ public class main {
 			agents[i] = new Agent(new Position(xRandom, yRandom));
 			gameEngine.putAgent(agents[i], gameUI,null);
 		}
+		
+		
 		int nbTour = 0;
-
 		commandPanel.setEnabled(false);
 		commandPanel.disableControls();
 		while(gameEngine.nbPatch != 0){

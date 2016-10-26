@@ -52,10 +52,10 @@ public class GameEngine{
 		
 		Position posAgent = agent.getPosition();
 		//System.out.println(posAgent.X+"  "+posAgent.Y);
-		IDrawable agentRect = new RectangleDrawable(AGENT, posAgent, new Dimension(10, 10));
-		FormDrawable form = (FormDrawable) agentRect;
+
+		FormDrawable agentRect = new RectangleDrawable(AGENT, posAgent, new Dimension(10, 10));
 		
-		if(ui.isFree(form.getRectangle())){
+		if(ui.isFree(agentRect.getRectangle())){
 			ui.addDrawable(agentRect);
 		} else {
 			List l = ui.findDrawables(posAgent);
@@ -63,13 +63,13 @@ public class GameEngine{
 				for(int i = 0;i<l.size();i++){
 					FormDrawable var = (FormDrawable) l.get(i);
 					if(var.color == PATCH){
-						IDrawable patchFound = new RectangleDrawable(PATCH_FOUND, (var).pos, new Dimension(10,10));
+						FormDrawable patchFound = new RectangleDrawable(PATCH_FOUND, (var).pos, new Dimension(10,10));
 						ui.addDrawable(patchFound);
 						ui.removeDrawable(var);
 						this.nbPatch--;
 						System.out.println("####Patchs : "+this.nbPatch+" ######");
 					} else {
-						IDrawable multipleAgent = new RectangleDrawable(MULTIPLE_AGENTS, (var).pos, new Dimension(10,10));
+						FormDrawable multipleAgent = new RectangleDrawable(MULTIPLE_AGENTS, (var).pos, new Dimension(10,10));
 						ui.addDrawable(multipleAgent);
 					}
 				}
