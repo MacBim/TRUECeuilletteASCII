@@ -39,17 +39,17 @@ public class CommandPanel extends JPanel {
 		this.setLayout(new GridLayout(12, 1));
 		//Création du slider pour la probabilité des *
 		this.starRateSlider = new JSlider();
-		this.starRateSlider.setMaximum(10);
+		this.starRateSlider.setMaximum(100);
 		this.starRateSlider.setMinimum(0);
-		this.starRateSlider.setValue(5);
-		this.starRateSlider.setPaintTicks(false);
+		this.starRateSlider.setValue(50);
+		this.starRateSlider.setPaintTicks(true);
 		this.starRateSlider.setPaintLabels(false);
-		this.starRateSlider.setMajorTickSpacing(5);
+		this.starRateSlider.setMajorTickSpacing(50);
 		this.starRateSlider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
-				starRateLabel.setText("Probailité des patchs : " + (double) ((JSlider)e.getSource()).getValue()/10);
+				starRateLabel.setText("Probailité des patchs : " + (double) ((JSlider)e.getSource()).getValue()/100);
 			}
 		});
 
@@ -120,7 +120,7 @@ public class CommandPanel extends JPanel {
 		
 	}
 	public double getNewMapStarProba(){
-		return this.starRateSlider.getValue() / 10;
+		return this.starRateSlider.getValue() / 100;
 	}
 
 	public int getAlpha(){
