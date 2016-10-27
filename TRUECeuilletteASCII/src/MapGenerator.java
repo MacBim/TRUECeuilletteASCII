@@ -33,6 +33,12 @@ public class MapGenerator {
 
 	}
 
+	/**
+	 * @param size size of the map
+	 * @param starProba probability of the patch to be added in a line
+	 * @return the path of the new map
+	 * @throws IOException
+	 */
 	public String generateMap(int size, double starProba) throws IOException {
 		String newLine = "";
 		BufferedWriter bfwrtr = null;
