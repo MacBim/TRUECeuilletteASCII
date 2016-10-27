@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 import javax.swing.*;
 
-public class UIv2 extends JPanel{
+public class GamePanel extends JPanel{
 	
 	private List drawables = new LinkedList();
 	

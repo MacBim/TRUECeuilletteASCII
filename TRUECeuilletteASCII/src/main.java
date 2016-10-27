@@ -22,12 +22,13 @@ public class main {
 	public static void main(String[] args) throws IOException {
 		
 		GameWindow gameWindow = new GameWindow(500);
-		UIv2 gameUI = (UIv2) gameWindow.getUI();
+		GamePanel gamePanel = (GamePanel) gameWindow.getGamePanel();
 		CommandPanel commandPanel = gameWindow.getCommandePanel();
 		MapGenerator mapGen = new MapGenerator();
 		Parser parser = new Parser();
-		List list = (List) parser.parse("../map.txt");
-		GameEngine gameEngine = new GameEngine(list,gameUI,gameWindow);
+		List<Position> list = (List) parser.parse("../map.txt");
+		GameEngine gameEngine = new GameEngine(list,gamePanel);
+		
 		commandPanel.generateNewMapButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
             	if(!action) // pour éviter de généer une map en pleine éxécution
@@ -49,7 +50,7 @@ public class main {
 	            String path = mapGen.generateMap(commandPanel.getNewMapSize(), commandPanel.getNewMapStarProba());
 	            if(path!= null)
 	            	list = (List) parser.parse(path);
-	            gameEngine.refresh(list, gameUI);
+	            gameEngine.refresh(list, gamePanel);
 	            //gameEngine = new GameEngine(list,gameUI,gameWindow);
 	            genNewMap = false;
 	            
@@ -68,10 +69,10 @@ public class main {
 		Agent[] agents = new Agent[nbAgent];
 		Random randomGenerator = new Random();
 		for(int i = 0;i<nbAgent;i++){
-			int xRandom = randomGenerator.nextInt(gameEngine.getSize()*10);
-			int yRandom = randomGenerator.nextInt(gameEngine.getSize()*10);
+			int xRandom = randomGenerator.nextInt(gameEngine.getSize()*GameEngine.SCALE);
+			int yRandom = randomGenerator.nextInt(gameEngine.getSize()*GameEngine.SCALE);
 			agents[i] = new Agent(new Position(xRandom, yRandom));
-			gameEngine.putAgent(agents[i], gameUI,null);
+			gameEngine.putAgent(agents[i], gamePanel,null);
 		}
 		
 		
@@ -81,9 +82,9 @@ public class main {
 		while(gameEngine.nbPatch != 0){
 			for(int i = 0;i<nbAgent;i++){
 				if(commandPanel.getFonctionUsed())
-					agents[i].moveLevy(gameEngine,alpha,gameUI);
+					agents[i].moveLevy(gameEngine,alpha,gamePanel);
 				else
-					agents[i].moveRandom(gameEngine,gameUI);
+					agents[i].moveRandom(gameEngine,gamePanel);
 				try {
 					Thread.sleep(25);
 				} catch (InterruptedException e) {

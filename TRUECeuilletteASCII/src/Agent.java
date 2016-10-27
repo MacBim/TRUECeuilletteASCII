@@ -22,17 +22,17 @@ public class Agent {
 		this.position = position;
 	}
 	
-	void move(GameEngine gameIA, Position pos,UIv2 ui){
+	void move(GameEngine gameIA, Position pos,GamePanel ui){
 		Position oldPos = this.getPosition();
 		this.setPosition(pos);
 		gameIA.putAgent(this,ui,oldPos);
 	}
 	
-	void moveRandom(GameEngine gameEngine, UIv2 ui){
+	void moveRandom(GameEngine gameEngine, GamePanel ui){
 		Position oldPos = this.position;
 		Random randomGenerator = new Random();
-		int xRandom = randomGenerator.nextInt(gameEngine.getSize()*10);
-		int yRandom = randomGenerator.nextInt(gameEngine.getSize()*10);
+		int xRandom = randomGenerator.nextInt(gameEngine.getSize()*GameEngine.SCALE);
+		int yRandom = randomGenerator.nextInt(gameEngine.getSize()*GameEngine.SCALE);
 		Position randomPosition = new Position(xRandom, yRandom);
 		this.position = randomPosition;
 		
@@ -62,7 +62,7 @@ public class Agent {
         return res;
     }
 	
-	void moveLevy(GameEngine gameEngine,float alpha,UIv2 ui){
+	void moveLevy(GameEngine gameEngine,float alpha,GamePanel ui){
 		int distanceToJump = this.getLevyNumber(alpha);
 		//System.out.println("distance : "+distanceToJump);
 		

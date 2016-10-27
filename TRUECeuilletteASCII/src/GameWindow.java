@@ -8,7 +8,7 @@ public class GameWindow extends JFrame {
 	
 	private int size;
 	private CommandPanel commandPanel;
-	private UIv2 ui;
+	private GamePanel ui;
 	
 	public GameWindow(int size){
 		
@@ -19,7 +19,7 @@ public class GameWindow extends JFrame {
 		this.setLayout(new GridLayout(1, 2));
 		this.size = size;
 		
-		this.ui = new UIv2();
+		this.ui = new GamePanel();
 		this.ui.setBackground(Color.WHITE);
 		this.commandPanel = new CommandPanel();
 		
@@ -36,7 +36,7 @@ public class GameWindow extends JFrame {
 		return this.commandPanel;
 	}
 	
-	public UIv2 getUI(){
+	public GamePanel getGamePanel(){
 		return this.ui;
 	}
 	

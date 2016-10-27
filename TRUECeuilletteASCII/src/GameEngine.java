@@ -17,14 +17,12 @@ public class GameEngine{
 	private static final Color MULTIPLE_AGENTS = Color.BLUE;
 	private static final Color PATCH_FOUND = Color.YELLOW;
 	public static final int SCALE = 10;
-	private GameWindow gameWindow;
 	private int size;
 
 	public int nbPatch;
 	public int nbTours;
 	
-	public GameEngine(List mapContent, UIv2 ui, GameWindow gameWindow){
-		this.gameWindow = gameWindow;
+	public GameEngine(List mapContent, GamePanel ui){
 		for (int i = 0; i < mapContent.size(); i++) {
 			if(i==0){
 				this.size = (int) mapContent.get(i);
@@ -37,7 +35,7 @@ public class GameEngine{
 		}
 	}
 
-	void putAgent(Agent agent, UIv2 ui, Position oldPos){
+	void putAgent(Agent agent, GamePanel ui, Position oldPos){
 		
 		if(oldPos != null){
 			List ltmp = ui.findDrawables(oldPos);
@@ -83,7 +81,7 @@ public class GameEngine{
 		return this.size;
 	}
 		
-	public void refresh(List mapContent, UIv2 ui){
+	public void refresh(List mapContent, GamePanel ui){
 		this.nbPatch = 0;
 		this.nbTours = 0;
 		ui.removeAllDrawables();
