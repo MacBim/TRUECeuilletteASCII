@@ -17,6 +17,7 @@ public class Parser {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
 			currentLine = br.readLine();
+			System.out.println(currentLine);
 			list.add(Integer.parseInt(currentLine));
 			while((currentLine = br.readLine()) != null){
 				for(int x=0;x<currentLine.length();x++){

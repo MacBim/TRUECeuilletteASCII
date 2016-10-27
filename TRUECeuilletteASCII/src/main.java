@@ -17,15 +17,25 @@ import javax.swing.JOptionPane;
 public class main {
 	
 	private static boolean action = false;
-
+	private static boolean genNewMap = false;
+	
 	public static void main(String[] args) throws IOException {
 		
 		GameWindow gameWindow = new GameWindow(500);
 		UIv2 gameUI = (UIv2) gameWindow.getUI();
 		CommandPanel commandPanel = gameWindow.getCommandePanel();
+		MapGenerator mapGen = new MapGenerator();
 		Parser parser = new Parser();
 		List list = (List) parser.parse("../map.txt");
 		GameEngine gameEngine = new GameEngine(list,gameUI,gameWindow);
+		commandPanel.generateNewMapButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+            	if(!action) // pour éviter de généer une map en pleine éxécution
+            		genNewMap = true;
+                      
+            }
+        });
+		
 		commandPanel.startButton.addActionListener(new ActionListener() { 
 	        public void actionPerformed(ActionEvent e) { 
 	            //gameEngine.lauchgame(gameWindow);
@@ -33,11 +43,20 @@ public class main {
 	            //commandPanel.setEnabled(false);
 	        } 
 	    });
-		
 		while(action == false){
 			// and we wait there until the button is pressed
-			System.out.println("im waiting");
+			if (genNewMap) {
+	            String path = mapGen.generateMap(commandPanel.getNewMapSize(), commandPanel.getNewMapStarProba());
+	            if(path!= null)
+	            	list = (List) parser.parse(path);
+	            gameEngine.refresh(list, gameUI);
+	            //gameEngine = new GameEngine(list,gameUI,gameWindow);
+	            genNewMap = false;
+	            
+	        }
+			System.out.println();
 		}
+		
 		
 		
 		int nbAgent = commandPanel.getAgents();

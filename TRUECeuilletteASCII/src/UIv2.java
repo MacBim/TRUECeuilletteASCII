@@ -55,5 +55,11 @@ public class UIv2 extends JPanel{
 		drawables.remove(d);
 		repaint();
 	}
+	
+	public void removeAllDrawables(){
+		this.drawables.clear();
+		this.removeAll();
+		this.repaint();
+	}
 
 }
