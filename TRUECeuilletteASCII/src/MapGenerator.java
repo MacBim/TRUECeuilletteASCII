@@ -7,11 +7,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.io.PrintWriter;
 import java.lang.Object;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Random;
 
 public class MapGenerator {
 
-	String constructLine(int size, double starProbability)
+	String getLine(int size, double starProbability)
 	/*
 	 * This function is used to create and return a string with a lenght of
 	 * "size". Returned Strings contains " ", "*", and "/n" at the end. number
@@ -19,16 +22,22 @@ public class MapGenerator {
 	 * implement a way to choose the probability in the menu.
 	 */
 	{
+		
+		DecimalFormat df = new DecimalFormat("##.##");
+		df.setRoundingMode(RoundingMode.DOWN);
+
 		String newLine = "";
 		Random randomGenerator = new Random();
 		for (int i = 0; i < size; i++) {
-			double d = randomGenerator.nextDouble();
+			double d = Double.parseDouble(df.format(randomGenerator.nextDouble()).replace(',', '.'));
+			System.out.println(d);
 			if (d <= starProbability)
 				newLine += "*";
 			else
 				newLine += " ";
 		}
 		//newLine += '\n';
+
 		return newLine;
 
 	}
@@ -43,7 +52,6 @@ public class MapGenerator {
 		String newLine = "";
 		BufferedWriter bfwrtr = null;
 		File f = new File("./map12345.txt");
-
 		try {
 			bfwrtr = new BufferedWriter(new FileWriter(f,false));
 
@@ -51,7 +59,8 @@ public class MapGenerator {
 			bfwrtr.write(System.lineSeparator());
 
 			for (int i = 0; i < size; i++) {
-				newLine = constructLine(size, starProba);
+				newLine = getLine(size, starProba);
+				
 				bfwrtr.write(newLine + System.lineSeparator());
 				//System.out.println(newLine);
 				

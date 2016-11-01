@@ -114,7 +114,6 @@ public class CommandPanel extends JPanel {
 
 
 	public int getNewMapSize(){
-		System.out.println(this.mapSizeField.getText());
 		try{
 			int val = Integer.parseInt(this.mapSizeField.getText().toString());
 			return  val;
@@ -125,7 +124,7 @@ public class CommandPanel extends JPanel {
 		
 	}
 	public double getNewMapStarProba(){
-		return this.starRateSlider.getValue() / 100;
+		return (double) this.starRateSlider.getValue() / 100;
 	}
 
 	public int getAlpha(){

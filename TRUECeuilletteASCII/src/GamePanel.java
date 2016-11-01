@@ -37,6 +37,12 @@ public class GamePanel extends JPanel{
 	public void addDrawable(IDrawable d) {
 		drawables.add(d);
 		repaint();
+		try {
+			Thread.sleep(25);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public List findDrawables(Position pos) {
