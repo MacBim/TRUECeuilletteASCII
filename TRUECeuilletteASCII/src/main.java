@@ -47,7 +47,13 @@ public class main {
 		while(action == false){
 			// and we wait there until the button is pressed
 			if (genNewMap) {
-	            String path = mapGen.generateMap(commandPanel.getNewMapSize(), commandPanel.getNewMapStarProba());
+				String path;
+				int size = 0;
+				if((size = commandPanel.getNewMapSize()) > 0){
+					path = mapGen.generateMap(commandPanel.getNewMapSize(), commandPanel.getNewMapStarProba());
+				} else {
+					path = null;
+				}
 	            if(path!= null)
 	            	list = (List) parser.parse(path);
 	            gameEngine.refresh(list, gamePanel);

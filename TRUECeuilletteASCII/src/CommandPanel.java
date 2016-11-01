@@ -115,8 +115,13 @@ public class CommandPanel extends JPanel {
 
 	public int getNewMapSize(){
 		System.out.println(this.mapSizeField.getText());
-		System.out.println(Integer.parseInt(this.mapSizeField.getText().toString()));
-		return  Integer.parseInt(this.mapSizeField.getText().toString());
+		try{
+			int val = Integer.parseInt(this.mapSizeField.getText().toString());
+			return  val;
+		} catch(NumberFormatException e){
+			this.mapSizeField.setText("Saisissez un nombre");
+		}
+		return -1;
 		
 	}
 	public double getNewMapStarProba(){
