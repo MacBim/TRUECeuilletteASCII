@@ -36,9 +36,19 @@ public class GamePanel extends JPanel{
 	
 	public void addDrawable(IDrawable d) {
 		drawables.add(d);
+//		try {
+//			Thread.sleep(25);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+	}
+	
+	public void displayGeneratedMap(IDrawable d){
+		drawables.add(d);
 		repaint();
 		try {
-			Thread.sleep(25);
+			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,7 +69,6 @@ public class GamePanel extends JPanel{
 	
 	public void removeDrawable(IDrawable d) {
 		drawables.remove(d);
-		repaint();
 	}
 	
 	public void removeAllDrawables(){

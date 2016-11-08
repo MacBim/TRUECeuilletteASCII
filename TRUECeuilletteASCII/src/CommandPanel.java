@@ -14,7 +14,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class CommandPanel extends JPanel {
+public class CommandPanel extends JPanel implements Runnable {
 
 	private JSlider alphaSlider;
 	private JSlider agentsSlider;
@@ -166,5 +166,12 @@ public class CommandPanel extends JPanel {
 	 */
 	public boolean getFonctionUsed(){
 		return this.jRLevy.isSelected();
+	}
+
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 }

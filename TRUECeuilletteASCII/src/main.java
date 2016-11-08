@@ -21,13 +21,21 @@ public class main {
 	
 	public static void main(String[] args) throws IOException {
 		
-		GameWindow gameWindow = new GameWindow(500);
-		GamePanel gamePanel = (GamePanel) gameWindow.getGamePanel();
-		CommandPanel commandPanel = gameWindow.getCommandePanel();
+		
+		
+		
+		GamePanel gamePanel = new GamePanel();
+		CommandPanel commandPanel = new CommandPanel();
 		MapGenerator mapGen = new MapGenerator();
 		Parser parser = new Parser();
 		List<Position> list = (List) parser.parse("../map.txt");
-		GameEngine gameEngine = new GameEngine(list,gamePanel);
+		GameEngine gameEngine = new GameEngine(list,gamePanel, gamePanel, commandPanel);
+		GameWindow gameWindow = new GameWindow(500,gamePanel,commandPanel, gameEngine);
+		
+		Thread refreshThread = new Thread(gameWindow);
+		Thread gameThread = new Thread(gameEngine);
+		
+		
 		
 		commandPanel.generateNewMapButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
@@ -42,6 +50,8 @@ public class main {
 	            //gameEngine.lauchgame(gameWindow);
 	            action = true;
 	            //commandPanel.setEnabled(false);
+	            refreshThread.start();
+	    		gameThread.start();
 	        } 
 	    });
 		while(action == false){
@@ -64,46 +74,8 @@ public class main {
 			System.out.println();
 		}
 		
-		
-		
-		int nbAgent = commandPanel.getAgents();
-		float alpha = (commandPanel.getAlpha()) / 10;
-		
-		System.out.println("Nombre agents " +nbAgent);
-		System.out.println("Valeur de l'alpha " +(float) alpha);
-		
-		Agent[] agents = new Agent[nbAgent];
-		Random randomGenerator = new Random();
-		for(int i = 0;i<nbAgent;i++){
-			int xRandom = randomGenerator.nextInt(gameEngine.getSize()*GameEngine.SCALE);
-			int yRandom = randomGenerator.nextInt(gameEngine.getSize()*GameEngine.SCALE);
-			agents[i] = new Agent(new Position(xRandom, yRandom));
-			gameEngine.putAgent(agents[i], gamePanel,null);
-		}
-		
-		
-		int nbTour = 0;
-		commandPanel.setEnabled(false);
-		commandPanel.disableControls();
-		while(gameEngine.nbPatch != 0){
-			for(int i = 0;i<nbAgent;i++){
-				if(commandPanel.getFonctionUsed())
-					agents[i].moveLevy(gameEngine,alpha,gamePanel);
-				else
-					agents[i].moveRandom(gameEngine,gamePanel);
-				try {
-					Thread.sleep(25);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			nbTour++;
-			commandPanel.changeTurnsLabel(nbTour);
-		}
-		commandPanel.setEnabled(true);
-		commandPanel.enableControls();
-		System.out.println("Nombre de tours = "+nbTour);
 	}
+
+	
 
 }
