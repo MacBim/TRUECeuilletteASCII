@@ -46,12 +46,12 @@ public class GameWindow extends JFrame implements Runnable {
 			//this.ui.revalidate();
 			this.ui.repaint();
 			try {
-				Thread.sleep(40);
+				Thread.sleep(250);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.err.println("JE SUIS LA DEDANS");
+
 		}
 	}
 
