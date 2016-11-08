@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 
@@ -73,7 +74,7 @@ public class GameEngine implements Runnable{
 						ui.addDrawable(patchFound);
 						ui.removeDrawable(var);
 						this.nbPatch--;
-						System.out.println("####Patchs : "+this.nbPatch+" ######");
+						this.commandPanel.refreshPatchLabel(this.nbPatch);
 					} else {
 						FormDrawable multipleAgent = new RectangleDrawable(MULTIPLE_AGENTS, (var).pos, new Dimension(10,10));
 						ui.addDrawable(multipleAgent);
@@ -146,7 +147,6 @@ public class GameEngine implements Runnable{
 		}
 		commandPanel.setEnabled(true);
 		commandPanel.enableControls();
-		System.out.println("Nombre de tours = "+nbTour);
 	}
 
 	@Override

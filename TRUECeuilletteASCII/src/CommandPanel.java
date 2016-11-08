@@ -14,16 +14,18 @@ import javax.swing.JFormattedTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class CommandPanel extends JPanel implements Runnable {
+public class CommandPanel extends JPanel{
 
 	private JSlider alphaSlider;
 	private JSlider agentsSlider;
 	private JSlider starRateSlider;
+	
 	private JLabel alphaLabel = new JLabel("Valeur de l'alpha : 1.0");
 	private JLabel agentsLabel = new JLabel("Nombre d'agents : 1");
 	private JLabel turnsLabel = new JLabel("Nombre de tours : 0");
-	
 	private JLabel starRateLabel = new JLabel("Probailité des patchs : 0.5");
+	private JLabel patchLabel = new JLabel();
+	
 	public JButton startButton = new JButton("Lancer la recherche");
 
 	private JRadioButton jRLevy = new JRadioButton("Méthode de Lévy");
@@ -36,7 +38,7 @@ public class CommandPanel extends JPanel implements Runnable {
 
 		this.jRLevy.setSelected(true);
 
-		this.setLayout(new GridLayout(12, 1));
+		this.setLayout(new GridLayout(13, 1));
 		//Création du slider pour la probabilité des *
 		this.starRateSlider = new JSlider();
 		this.starRateSlider.setMaximum(100);
@@ -107,6 +109,8 @@ public class CommandPanel extends JPanel implements Runnable {
 		this.add(jRRandom);
 		this.add(this.startButton);
 		this.add(this.turnsLabel);
+		this.add(this.patchLabel);
+		
 		this.setVisible(true);
 
 
@@ -167,11 +171,9 @@ public class CommandPanel extends JPanel implements Runnable {
 	public boolean getFonctionUsed(){
 		return this.jRLevy.isSelected();
 	}
-
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
+	
+	public void refreshPatchLabel(int nbPatch){
+		this.patchLabel.setText("Patchs restants : "+nbPatch);
 	}
+
 }

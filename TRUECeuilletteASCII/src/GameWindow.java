@@ -13,8 +13,7 @@ public class GameWindow extends JFrame implements Runnable {
 	
 	public GameWindow(int size, GamePanel gamePanel, CommandPanel commandPanel, GameEngine gameEngine){
 		
-		//this.gameFrame = new JFrame();
-		this.setSize(size+100, size);
+		this.setSize(((gameEngine.getSize()*10)*2)+20, (gameEngine.getSize()*10)+40);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// une ligne, deux colones
 		this.setLayout(new GridLayout(1, 2));
