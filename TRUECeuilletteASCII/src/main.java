@@ -22,13 +22,7 @@ public class main {
 	
 	public static void main(String[] args) throws IOException {
 		
-		MenuUI menu = new MenuUI();
-		String path = menu.getSelectedMap();
-		if(path != null){
-			Parser parser = new Parser();
-			List<Position> list = (List) parser.parse(path);
-			GamePanel gp = new GamePanel();
-		}		
+		MenuUI menu = new MenuUI();		
 	}
 
 	
