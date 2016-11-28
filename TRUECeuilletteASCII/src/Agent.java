@@ -25,7 +25,7 @@ public class Agent {
 	void move(GameEngine gameIA, Position pos,GamePanel ui){
 		Position oldPos = this.getPosition();
 		this.setPosition(pos);
-		gameIA.putAgent(this,ui,oldPos);
+		gameIA.putAgent(this,oldPos);
 	}
 	
 	void moveRandom(GameEngine gameEngine, GamePanel ui){
@@ -37,7 +37,7 @@ public class Agent {
 		this.position = randomPosition;
 		
 		//move(gameIA, randomPosition, ui);
-		gameEngine.putAgent(this, ui, oldPos);
+		gameEngine.putAgent(this, oldPos);
 	}
 	int getLevyNumber(float alpha){
 		Random rand = new Random();
@@ -95,6 +95,6 @@ public class Agent {
 		//System.out.println("x : "+mod(this.position.getX()+x,gameIA.content.length)+"  y : "+mod(this.position.getY()+y,gameIA.content.length));
 		//System.out.println("x : "+this.position.X+"  y : "+this.position.Y);
 		
-		gameEngine.putAgent(this,ui,oldPostion);
+		gameEngine.putAgent(this,oldPostion);
 	}
 }

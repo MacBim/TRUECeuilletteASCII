@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 
-public class GameEngine implements Runnable{
+public class GameEngine implements Runnable {
 
 	private static final Color PATCH = Color.GREEN;
 	private static final Color AGENT = Color.RED;
@@ -19,16 +19,18 @@ public class GameEngine implements Runnable{
 	private static final Color PATCH_FOUND = Color.YELLOW;
 	
 	private GamePanel gamePanel;
-	private CommandPanel commandPanel;
 	
 	public static final int SCALE = 10;
 	private int size;
 
+	private int nbAgent;
+	private float alpha;
+	private boolean functionUsed;
+	
 	public int nbPatch;
 	public int nbTours;
 	
-	public GameEngine(List mapContent, GamePanel ui, GamePanel gamePanel, CommandPanel commandPanel){
-		this.commandPanel = commandPanel;
+	public GameEngine(List mapContent, GamePanel gamePanel){
 		this.gamePanel = gamePanel;
 		
 		for (int i = 0; i < mapContent.size(); i++) {
@@ -37,22 +39,21 @@ public class GameEngine implements Runnable{
 			} else {
 				Position tmp = (Position) mapContent.get(i);
 				IDrawable patch = new RectangleDrawable(PATCH, new Position(tmp.X*SCALE, tmp.Y*SCALE), new Dimension(10, 10));
-				ui.addDrawable(patch);
+				gamePanel.addDrawable(patch);
 				this.nbPatch++;
 			}
 		}
 	}
 
-	void putAgent(Agent agent, GamePanel ui, Position oldPos){
-		
+	void putAgent(Agent agent, Position oldPos){
 		if(oldPos != null){
-			List ltmp = ui.findDrawables(oldPos);
+			List ltmp = this.gamePanel.findDrawables(oldPos);
 			if(ltmp == null){
 				System.out.println("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLL");
 			}
 			for(int i = 0; i < ltmp.size(); i++){
 				FormDrawable form = (FormDrawable) ltmp.get(i);
-				ui.removeDrawable(form);
+				this.gamePanel.removeDrawable(form);
 			}
 		}
 		
@@ -62,22 +63,21 @@ public class GameEngine implements Runnable{
 
 		FormDrawable agentRect = new RectangleDrawable(AGENT, posAgent, new Dimension(10, 10));
 		
-		if(ui.isFree(agentRect.getRectangle())){
-			ui.addDrawable(agentRect);
+		if(this.gamePanel.isFree(agentRect.getRectangle())){
+			this.gamePanel.addDrawable(agentRect);
 		} else {
-			List<FormDrawable> l = ui.findDrawables(posAgent);
+			List<FormDrawable> l = this.gamePanel.findDrawables(posAgent);
 			if(!l.isEmpty()){
 				for(int i = 0;i<l.size();i++){
 					FormDrawable var = l.get(i);
 					if(var.color == PATCH){
 						FormDrawable patchFound = new RectangleDrawable(PATCH_FOUND, (var).pos, new Dimension(10,10));
-						ui.addDrawable(patchFound);
-						ui.removeDrawable(var);
+						this.gamePanel.addDrawable(patchFound);
+						this.gamePanel.removeDrawable(var);
 						this.nbPatch--;
-						this.commandPanel.refreshPatchLabel(this.nbPatch);
 					} else {
 						FormDrawable multipleAgent = new RectangleDrawable(MULTIPLE_AGENTS, (var).pos, new Dimension(10,10));
-						ui.addDrawable(multipleAgent);
+						this.gamePanel.addDrawable(multipleAgent);
 					}
 				}
 			}
@@ -88,19 +88,31 @@ public class GameEngine implements Runnable{
 	public int getSize(){
 		return this.size;
 	}
-		
-	public void refresh(List mapContent, GamePanel ui){
+	
+	public void setNbAgents(int nbAgents) {
+		this.nbAgent = nbAgents;
+	}
+
+	public void setAlpha(float alpha) {
+		this.alpha = alpha;
+	}
+	
+	public void setFunctionUsed(boolean functionUsed) {
+		this.alpha = alpha;
+	}
+	
+	public void refresh(List mapContent){
 		this.nbPatch = 0;
 		this.nbTours = 0;
-		ui.removeAllDrawables();
-		ui.revalidate();
+		this.gamePanel.removeAllDrawables();
+		this.gamePanel.revalidate();
 		int i = 0;
 		for(i = 0; i < mapContent.size(); i++){
 			if(i != 0){
 				Position tmpPos = (Position) mapContent.get(i);
 				Position newPos =  new Position(tmpPos.X*SCALE, tmpPos.Y*SCALE);
 				FormDrawable fomrToAdd = new RectangleDrawable(PATCH, newPos, new Dimension(10, 10));
-				ui.displayGeneratedMap(fomrToAdd);
+				this.gamePanel.displayGeneratedMap(fomrToAdd);
 				this.nbPatch++;
 			} else {
 				this.size = (int) mapContent.get(i);
@@ -108,11 +120,8 @@ public class GameEngine implements Runnable{
 		}
 	}
 	
-	public void launchGame(GamePanel gamePanel,
-			CommandPanel commandPanel) {
-		int nbAgent = commandPanel.getAgents();
-		float alpha = (commandPanel.getAlpha()) / 10;
-		
+	public void launchGame() {
+	
 		System.out.println("Nombre agents " +nbAgent);
 		System.out.println("Valeur de l'alpha " +(float) alpha);
 		
@@ -122,16 +131,14 @@ public class GameEngine implements Runnable{
 			int xRandom = randomGenerator.nextInt(this.getSize()*GameEngine.SCALE);
 			int yRandom = randomGenerator.nextInt(this.getSize()*GameEngine.SCALE);
 			agents[i] = new Agent(new Position(xRandom, yRandom));
-			this.putAgent(agents[i], gamePanel,null);
+			this.putAgent(agents[i],null);
 		}
 		
 		
 		int nbTour = 0;
-		commandPanel.setEnabled(false);
-		commandPanel.disableControls();
 		while(this.nbPatch != 0){
 			for(int i = 0;i<nbAgent;i++){
-				if(commandPanel.getFonctionUsed())
+				if(functionUsed)
 					agents[i].moveLevy(this,alpha,gamePanel);
 				else
 					agents[i].moveRandom(this,gamePanel);
@@ -143,16 +150,17 @@ public class GameEngine implements Runnable{
 				}
 			}
 			nbTour++;
-			commandPanel.changeTurnsLabel(nbTour);
 		}
-		commandPanel.setEnabled(true);
-		commandPanel.enableControls();
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		launchGame(gamePanel, commandPanel);
+		launchGame();
+	}
+	
+	public GamePanel getGamePanel(){
+		return this.gamePanel;
 	}
 
 }

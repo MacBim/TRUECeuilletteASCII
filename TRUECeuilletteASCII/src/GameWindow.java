@@ -8,7 +8,7 @@ public class GameWindow extends JFrame implements Runnable {
 	
 	private int size;
 	private CommandPanel commandPanel;
-	private GamePanel ui;
+	private GamePanel gp;
 	private GameEngine gameEngine;
 	
 	public GameWindow(int size, GamePanel gamePanel, CommandPanel commandPanel, GameEngine gameEngine){
@@ -20,11 +20,11 @@ public class GameWindow extends JFrame implements Runnable {
 		this.size = size;
 		
 		this.gameEngine = gameEngine;
-		this.ui = gamePanel;
-		this.ui.setBackground(Color.WHITE);
+		this.gp = gamePanel;
+		this.gp.setBackground(Color.WHITE);
 		this.commandPanel = commandPanel;
 		
-		this.getContentPane().add(this.ui);
+		this.getContentPane().add(this.gp);
 		this.getContentPane().add(this.commandPanel);
 		this.setVisible(true);
 		
@@ -35,7 +35,7 @@ public class GameWindow extends JFrame implements Runnable {
 	}
 	
 	public GamePanel getGamePanel(){
-		return this.ui;
+		return this.gp;
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public class GameWindow extends JFrame implements Runnable {
 		// TODO Auto-generated method stub
 		while(this.gameEngine.nbPatch != 0){
 			//this.ui.revalidate();
-			this.ui.repaint();
+			this.gp.repaint();
 			try {
 				Thread.sleep(250);
 			} catch (InterruptedException e) {
