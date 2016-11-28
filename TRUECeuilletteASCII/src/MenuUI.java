@@ -60,12 +60,12 @@ public class MenuUI extends JFrame {
 		contentPane.add(AgentSelectorLabel);
 		
 		startBtn = new JButton("Start");
-		startBtn.setBounds(235, 141, 118, 23);
+		startBtn.setBounds(235, 141, 133, 23);
 		startBtn.addActionListener(e -> start());
 		contentPane.add(startBtn);
 		
 		openMapBtn = new JButton("Open a map");
-		openMapBtn.setBounds(235, 309, 118, 23);
+		openMapBtn.setBounds(235, 309, 133, 23);
 		openMapBtn.addActionListener(e -> chooseMap());
 		contentPane.add(openMapBtn);
 		
@@ -85,7 +85,7 @@ public class MenuUI extends JFrame {
 		contentPane.add(logoLabel);
 		
 		generateMapBtn = new JButton("Generate a map");
-		generateMapBtn.setBounds(235, 213, 118, 23);
+		generateMapBtn.setBounds(235, 213, 133, 23);
 		generateMapBtn.addActionListener(e -> generateMap());
 		contentPane.add(generateMapBtn);
 		
@@ -106,11 +106,11 @@ public class MenuUI extends JFrame {
 		functionUsedCB = new JComboBox();
 		functionUsedCB.setModel(new DefaultComboBoxModel(new String[] {"L\u00E9vy", "Random"}));
 		functionUsedCB.setSelectedIndex(0);
-		functionUsedCB.setBounds(378, 142, 95, 20);
+		functionUsedCB.setBounds(394, 144, 95, 20);
 		contentPane.add(functionUsedCB);
 		
 		JLabel functionUsedLabel = new JLabel("Function to use :");
-		functionUsedLabel.setBounds(378, 124, 95, 14);
+		functionUsedLabel.setBounds(394, 126, 95, 14);
 		contentPane.add(functionUsedLabel);
 		
 		mapSizeSelector = new JSpinner();
