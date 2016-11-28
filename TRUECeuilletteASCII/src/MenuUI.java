@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.swing.SwingConstants;
@@ -32,6 +34,8 @@ public class MenuUI extends JFrame {
 	private JComboBox functionUsedCB;
 	private String selectedMap;
 	private JLabel mapNameLabel;
+	private JSpinner mapSizeSelector;
+	private JSpinner startProbabilitySelector;
 
 	/**
 	 * Create the frame.
@@ -39,7 +43,7 @@ public class MenuUI extends JFrame {
 	public MenuUI() {
 		setTitle("Projet");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 357);
+		setBounds(100, 100, 676, 408);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(135, 206, 250));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -48,73 +52,78 @@ public class MenuUI extends JFrame {
 		
 		agentSelector = new JSpinner();
 		agentSelector.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
-		agentSelector.setBounds(27, 167, 87, 20);
+		agentSelector.setBounds(57, 210, 87, 20);
 		contentPane.add(agentSelector);
 		
 		JLabel AgentSelectorLabel = new JLabel("Agents");
-		AgentSelectorLabel.setBounds(27, 150, 87, 14);
+		AgentSelectorLabel.setBounds(57, 193, 87, 14);
 		contentPane.add(AgentSelectorLabel);
 		
 		startBtn = new JButton("Start");
-		startBtn.setBounds(172, 146, 118, 23);
+		startBtn.setBounds(235, 141, 118, 23);
 		startBtn.addActionListener(e -> start());
 		contentPane.add(startBtn);
 		
 		openMapBtn = new JButton("Open a map");
-		openMapBtn.setBounds(172, 230, 118, 23);
+		openMapBtn.setBounds(235, 309, 118, 23);
 		openMapBtn.addActionListener(e -> chooseMap());
 		contentPane.add(openMapBtn);
 		
 		alphaSelector = new JSpinner();
 		alphaSelector.setToolTipText("");
 		alphaSelector.setModel(new SpinnerNumberModel(new Float(0), new Float(0), new Float(2), new Float(0.01)));
-		alphaSelector.setBounds(27, 214, 87, 20);
+		alphaSelector.setBounds(57, 257, 87, 20);
 		contentPane.add(alphaSelector);
 		
 		JLabel alphaSelectorLabel = new JLabel("Alpha");
-		alphaSelectorLabel.setBounds(25, 193, 78, 14);
+		alphaSelectorLabel.setBounds(55, 236, 78, 14);
 		contentPane.add(alphaSelectorLabel);
 		
 		JLabel logoLabel = new JLabel("Smart Picking");
 		logoLabel.setFont(new Font("Tahoma", Font.PLAIN, 41));
-		logoLabel.setBounds(109, 30, 254, 84);
+		logoLabel.setBounds(218, 33, 254, 84);
 		contentPane.add(logoLabel);
 		
 		generateMapBtn = new JButton("Generate a map");
-		generateMapBtn.setBounds(172, 184, 118, 23);
+		generateMapBtn.setBounds(235, 213, 118, 23);
+		generateMapBtn.addActionListener(e -> generateMap());
 		contentPane.add(generateMapBtn);
 		
 		mapNameLabel = new JLabel("No map selected");
 		mapNameLabel.setEnabled(false);
-		mapNameLabel.setBounds(315, 234, 95, 14);
+		mapNameLabel.setBounds(394, 313, 95, 14);
 		contentPane.add(mapNameLabel);
 		
-		JSpinner startProbabilitySelector = new JSpinner();
-		startProbabilitySelector.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(0.01)));
-		startProbabilitySelector.setBounds(315, 187, 78, 20);
+		startProbabilitySelector = new JSpinner();
+		startProbabilitySelector.setModel(new SpinnerNumberModel(new Double(0.5), new Double(0), null, new Double(0.01)));
+		startProbabilitySelector.setBounds(394, 216, 78, 20);
 		contentPane.add(startProbabilitySelector);
 		
 		starProbabilityLabel = new JLabel("Patch probability");
-		starProbabilityLabel.setBounds(315, 174, 95, 14);
+		starProbabilityLabel.setBounds(394, 193, 95, 14);
 		contentPane.add(starProbabilityLabel);
 		
 		functionUsedCB = new JComboBox();
 		functionUsedCB.setModel(new DefaultComboBoxModel(new String[] {"L\u00E9vy", "Random"}));
 		functionUsedCB.setSelectedIndex(0);
-		functionUsedCB.setBounds(315, 147, 95, 20);
+		functionUsedCB.setBounds(378, 142, 95, 20);
 		contentPane.add(functionUsedCB);
 		
 		JLabel functionUsedLabel = new JLabel("Function to use :");
-		functionUsedLabel.setBounds(315, 129, 95, 14);
+		functionUsedLabel.setBounds(378, 124, 95, 14);
 		contentPane.add(functionUsedLabel);
+		
+		mapSizeSelector = new JSpinner();
+		mapSizeSelector.setModel(new SpinnerNumberModel(new Integer(10), new Integer(10), null, new Integer(1)));
+		mapSizeSelector.setBounds(394, 262, 78, 20);
+		contentPane.add(mapSizeSelector);
+		
+		JLabel mapSizeLabel = new JLabel("Map Size");
+		mapSizeLabel.setBounds(394, 243, 46, 14);
+		contentPane.add(mapSizeLabel);
 		this.setResizable(false);
 		this.setVisible(true);
 	}
-	
-	public void linkGameEngine(GameEngine ge){
-		this.ge = ge;
-	}
-	
 	public void chooseMap(){
 		String path = null;
 		File f;
@@ -132,6 +141,19 @@ public class MenuUI extends JFrame {
 	
 	public String getSelectedMap(){
 		return this.selectedMap;
+	}
+	
+	public void generateMap(){
+		MapGenerator mg = new MapGenerator();
+		try {
+			this.selectedMap = mg.generateMap((int) mapSizeSelector.getValue(), (double) startProbabilitySelector.getValue());
+			String tmpPath = this.selectedMap;
+			Path p1 = Paths.get(tmpPath); 
+			this.mapNameLabel.setText(p1.getFileName().toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void start(){
@@ -152,14 +174,9 @@ public class MenuUI extends JFrame {
 			ge.setNbAgents((int) agentSelector.getValue());
 			ge.setFunctionUsed(getFunctionUsed());
 			
-			System.out.println(agentSelector.getValue());
-			
-			
 			Thread gameThread = new Thread(ge);
 			gameThread.start();
 			
-			
-			//ge.launchGame((int) agentSelector.getValue(), (float) alphaSelector.getValue(), getFunctionUsed());
 			Thread refreshThread = new Thread(ge.getGamePanel());
 			refreshThread.start();
 		}

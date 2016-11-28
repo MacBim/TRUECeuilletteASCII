@@ -21,7 +21,6 @@ public class main {
 	private static boolean genNewMap = false;
 	
 	public static void main(String[] args) throws IOException {
-		
 		MenuUI menu = new MenuUI();		
 	}
 
