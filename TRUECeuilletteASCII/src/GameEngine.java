@@ -107,7 +107,7 @@ public class GameEngine implements Runnable {
 	}
 	
 	public void setFunctionUsed(boolean functionUsed) {
-		this.alpha = alpha;
+		this.functionUsed = functionUsed;
 	}
 	
 	public void refresh(List mapContent){
@@ -116,17 +116,6 @@ public class GameEngine implements Runnable {
 		this.gamePanel.removeAllDrawables();
 		this.gamePanel.revalidate();
 		int i = 0;
-//		for(i = 0; i < mapContent.size(); i++){
-//			if(i != 0){
-//				Position tmpPos = (Position) mapContent.get(i);
-//				Position newPos =  new Position(tmpPos.X*SCALE, tmpPos.Y*SCALE);
-//				FormDrawable fomrToAdd = new RectangleDrawable(PATCH, newPos, new Dimension(10, 10));
-//				this.gamePanel.displayGeneratedMap(fomrToAdd);
-//				this.nbPatch++;
-//			} else {
-//				this.size = (int) mapContent.get(i);
-//			}
-//		}
 		for ( i = 0; i < mapContent.size(); i++) {
 			if(i==0){
 				this.size = (int) mapContent.get(i);
@@ -147,10 +136,6 @@ public class GameEngine implements Runnable {
 		System.out.println("Mode normal");
 		System.out.println("Nombre agents " +nbAgent);
 		System.out.println("Valeur de l'alpha " +(float) alpha);
-		
-		// sauvegardes
-//		List drawablesTmp = this.gamePanel.getDrawables();
-//		int nbPatchTmp = this.nbPatch;
 		
 		int start;
 		if(!this.menu.isCalibrationMode()){
