@@ -29,10 +29,11 @@ public class GameEngine implements Runnable {
 	
 	public int nbPatch;
 	public int nbTours;
+	private MenuUI menu;
 	
-	public GameEngine(List mapContent, GamePanel gamePanel){
+	public GameEngine(List mapContent, GamePanel gamePanel, MenuUI menu){
 		this.gamePanel = gamePanel;
-		
+		this.menu = menu;
 		for (int i = 0; i < mapContent.size(); i++) {
 			if(i==0){
 				this.size = (int) mapContent.get(i);
@@ -41,15 +42,17 @@ public class GameEngine implements Runnable {
 				IDrawable patch = new RectangleDrawable(PATCH, new Position(tmp.X*SCALE, tmp.Y*SCALE), new Dimension(10, 10));
 				gamePanel.addDrawable(patch);
 				this.nbPatch++;
+				
 			}
 		}
+		gamePanel.setNbPatch(this.nbPatch);
 	}
 
 	void putAgent(Agent agent, Position oldPos){
 		if(oldPos != null){
 			List ltmp = this.gamePanel.findDrawables(oldPos);
 			if(ltmp == null){
-				System.out.println("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLL");
+				System.out.println("null");
 			}
 			for(int i = 0; i < ltmp.size(); i++){
 				FormDrawable form = (FormDrawable) ltmp.get(i);
@@ -75,6 +78,7 @@ public class GameEngine implements Runnable {
 						this.gamePanel.addDrawable(patchFound);
 						this.gamePanel.removeDrawable(var);
 						this.nbPatch--;
+						this.gamePanel.setNbPatch(this.nbPatch);
 					} else {
 						FormDrawable multipleAgent = new RectangleDrawable(MULTIPLE_AGENTS, (var).pos, new Dimension(10,10));
 						this.gamePanel.addDrawable(multipleAgent);
@@ -119,9 +123,10 @@ public class GameEngine implements Runnable {
 			}
 		}
 	}
-	
-	public void launchGame() {
-	
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
 		System.out.println("Nombre agents " +nbAgent);
 		System.out.println("Valeur de l'alpha " +(float) alpha);
 		
@@ -133,7 +138,6 @@ public class GameEngine implements Runnable {
 			agents[i] = new Agent(new Position(xRandom, yRandom));
 			this.putAgent(agents[i],null);
 		}
-		
 		
 		int nbTour = 0;
 		while(this.nbPatch != 0){
@@ -151,16 +155,13 @@ public class GameEngine implements Runnable {
 			}
 			nbTour++;
 		}
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		launchGame();
+//		this.menu.getRefreshThread().interrupt();
+//		this.menu.getGameThread().interrupt();
+		System.err.println("done");
+		this.gamePanel.dispose();
 	}
 	
 	public GamePanel getGamePanel(){
 		return this.gamePanel;
 	}
-
 }

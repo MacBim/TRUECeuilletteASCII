@@ -11,6 +11,7 @@ public class GamePanel extends JFrame implements Runnable{
 	
 	private List drawables = new LinkedList();
 	private JPanel content;
+	private int nbPatch;
 
 	public GamePanel(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -32,6 +33,10 @@ public class GamePanel extends JFrame implements Runnable{
 			}
 				
 		}
+	}
+	
+	public void setNbPatch(int nbPatch){
+		this.nbPatch = nbPatch;
 	}
 	
 	public boolean isFree(Rectangle rect) {
@@ -84,16 +89,19 @@ public class GamePanel extends JFrame implements Runnable{
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		while(true){
-			//this.ui.revalidate();
+		while(this.nbPatch != 0){
+			this.invalidate();
+			this.validate();
 			this.repaint();
 			try {
+				System.err.println("Refreshing...");
 				Thread.sleep(250);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Thread déja arrété");
+				return;
+				//this.dispose();
 			}
-
 		}
 	}
 	

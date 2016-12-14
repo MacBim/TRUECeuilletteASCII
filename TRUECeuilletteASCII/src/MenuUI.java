@@ -23,6 +23,9 @@ import javax.swing.DefaultComboBoxModel;
 
 public class MenuUI extends JFrame {
 
+	private Thread refreshThread;
+	private Thread gameThread;
+	
 	private GameEngine ge;
 	private JPanel contentPane;
 	private JButton generateMapBtn;
@@ -158,7 +161,6 @@ public class MenuUI extends JFrame {
 	
 	private void start(){
 		if(selectedMap != null){
-			
 			List list = null;
 			Parser parser = new Parser();
 			try {
@@ -168,16 +170,16 @@ public class MenuUI extends JFrame {
 				e.printStackTrace();
 			}
 			GamePanel gp = new GamePanel();
-			GameEngine ge = new GameEngine(list, gp);
+			GameEngine ge = new GameEngine(list, gp, this);
 			ge.getGamePanel().setVisible(true);
 			ge.setAlpha((float) alphaSelector.getValue());
 			ge.setNbAgents((int) agentSelector.getValue());
 			ge.setFunctionUsed(getFunctionUsed());
 			
-			Thread gameThread = new Thread(ge);
+			gameThread = new Thread(ge);
 			gameThread.start();
 			
-			Thread refreshThread = new Thread(ge.getGamePanel());
+			refreshThread = new Thread(ge.getGamePanel());
 			refreshThread.start();
 		}
 	}
@@ -188,4 +190,14 @@ public class MenuUI extends JFrame {
 		}
 		return false; // AKA Random
 	}
+	
+	public Thread getRefreshThread() {
+		return refreshThread;
+	}
+	
+	public Thread getGameThread() {
+		return gameThread;
+	}
+	
+	
 }

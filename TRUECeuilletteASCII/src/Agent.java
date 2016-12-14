@@ -64,27 +64,23 @@ public class Agent {
 	
 	void moveLevy(GameEngine gameEngine,float alpha,GamePanel ui){
 		int distanceToJump = this.getLevyNumber(alpha);
-		//System.out.println("distance : "+distanceToJump);
 		
 		Random rand = new Random();
 		int angle = rand.nextInt(360);
 		
 		int radAngle = (int) Math.round(angle * Math.PI/180);
-		//System.out.println("radangle : "+radAngle);
 		
 		int newX = (int) Math.round((Math.cos(radAngle)/distanceToJump)*100 + this.position.X);
-		if(newX < 0){
-			newX = 0;
-		}
-		if(newX > gameEngine.getSize()*gameEngine.SCALE){
-			newX = gameEngine.getSize()*gameEngine.SCALE;
+		while(newX < 0 || newX > gameEngine.getSize()*gameEngine.SCALE){ // si l'agent sort du terrain on retire un angle
+			 angle = rand.nextInt(360);
+			 radAngle = (int) Math.round(angle * Math.PI/180);
+			 newX = (int) Math.round((Math.cos(radAngle)/distanceToJump)*100 + this.position.X);
 		}
 		int newY = (int) Math.round((Math.sin(radAngle)/distanceToJump)*100 + this.position.Y);
-		if(newY < 0){
-			newY = 0;
-		}
-		if(newY > gameEngine.getSize()*gameEngine.SCALE){
-			newY = gameEngine.getSize()*gameEngine.SCALE;
+		while(newY < 0 || newY > gameEngine.getSize()*gameEngine.SCALE){ // si l'agent sort du terrain on retire un angle
+			 angle = rand.nextInt(360);
+			 radAngle = (int) Math.round(angle * Math.PI/180);
+			 newY = (int) Math.round((Math.sin(radAngle)/distanceToJump)*100 + this.position.Y);
 		}
 		//System.out.println("x : "+newX+"  y : "+newY);
 		Position oldPostion = this.position;

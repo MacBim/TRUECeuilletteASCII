@@ -16,14 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class main {
-	
-	private static boolean action = false;
-	private static boolean genNewMap = false;
-	
 	public static void main(String[] args) throws IOException {
 		MenuUI menu = new MenuUI();		
 	}
-
-	
-
 }
