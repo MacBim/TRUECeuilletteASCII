@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.Normalizer.Form;
 import java.util.LinkedList;
@@ -31,7 +33,10 @@ public class GameEngine implements Runnable {
 	public int nbTours;
 	private MenuUI menu;
 	
+	private final List SaveMapContent;
+	
 	public GameEngine(List mapContent, GamePanel gamePanel, MenuUI menu){
+		this.SaveMapContent = mapContent;
 		this.gamePanel = gamePanel;
 		this.menu = menu;
 		for (int i = 0; i < mapContent.size(); i++) {
@@ -111,57 +116,89 @@ public class GameEngine implements Runnable {
 		this.gamePanel.removeAllDrawables();
 		this.gamePanel.revalidate();
 		int i = 0;
-		for(i = 0; i < mapContent.size(); i++){
-			if(i != 0){
-				Position tmpPos = (Position) mapContent.get(i);
-				Position newPos =  new Position(tmpPos.X*SCALE, tmpPos.Y*SCALE);
-				FormDrawable fomrToAdd = new RectangleDrawable(PATCH, newPos, new Dimension(10, 10));
-				this.gamePanel.displayGeneratedMap(fomrToAdd);
-				this.nbPatch++;
-			} else {
+//		for(i = 0; i < mapContent.size(); i++){
+//			if(i != 0){
+//				Position tmpPos = (Position) mapContent.get(i);
+//				Position newPos =  new Position(tmpPos.X*SCALE, tmpPos.Y*SCALE);
+//				FormDrawable fomrToAdd = new RectangleDrawable(PATCH, newPos, new Dimension(10, 10));
+//				this.gamePanel.displayGeneratedMap(fomrToAdd);
+//				this.nbPatch++;
+//			} else {
+//				this.size = (int) mapContent.get(i);
+//			}
+//		}
+		for ( i = 0; i < mapContent.size(); i++) {
+			if(i==0){
 				this.size = (int) mapContent.get(i);
+			} else {
+				Position tmp = (Position) mapContent.get(i);
+				IDrawable patch = new RectangleDrawable(PATCH, new Position(tmp.X*SCALE, tmp.Y*SCALE), new Dimension(10, 10));
+				gamePanel.addDrawable(patch);
+				this.nbPatch++;
+				
 			}
 		}
+
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+		System.out.println("Mode normal");
 		System.out.println("Nombre agents " +nbAgent);
 		System.out.println("Valeur de l'alpha " +(float) alpha);
 		
-		Agent[] agents = new Agent[nbAgent];
-		Random randomGenerator = new Random();
-		for(int i = 0;i<nbAgent;i++){
-			int xRandom = randomGenerator.nextInt(this.getSize()*GameEngine.SCALE);
-			int yRandom = randomGenerator.nextInt(this.getSize()*GameEngine.SCALE);
-			agents[i] = new Agent(new Position(xRandom, yRandom));
-			this.putAgent(agents[i],null);
-		}
+		// sauvegardes
+//		List drawablesTmp = this.gamePanel.getDrawables();
+//		int nbPatchTmp = this.nbPatch;
 		
-		int nbTour = 0;
-		while(this.nbPatch != 0){
-			for(int i = 0;i<nbAgent;i++){
-				if(functionUsed)
-					agents[i].moveLevy(this,alpha,gamePanel);
-				else
-					agents[i].moveRandom(this,gamePanel);
-				try {
-					Thread.sleep(25);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			nbTour++;
+		int start;
+		if(!this.menu.isCalibrationMode()){
+			// pour au moin le faire une fois 
+			start = -1;
+		} else {
+			start = 0;
 		}
-//		this.menu.getRefreshThread().interrupt();
-//		this.menu.getGameThread().interrupt();
-		System.err.println("done");
+		CSVFileWriter csvExporter = new CSVFileWriter();
+		for(int currentIteration = start ; currentIteration < this.menu.getNbIterations(); currentIteration++ ){
+			
+			Agent[] agents = new Agent[nbAgent];
+			Random randomGenerator = new Random();
+			for(int i = 0;i<nbAgent;i++){
+				int xRandom = randomGenerator.nextInt(this.getSize()*GameEngine.SCALE);
+				int yRandom = randomGenerator.nextInt(this.getSize()*GameEngine.SCALE);
+				agents[i] = new Agent(new Position(xRandom, yRandom));
+				this.putAgent(agents[i],null);
+			}
+			
+			int nbTour = 0;
+			while(nbPatch != 0){
+				for(int i = 0;i<nbAgent;i++){
+					if(functionUsed)
+						agents[i].moveLevy(this,alpha,gamePanel);
+					else
+						agents[i].moveRandom(this,gamePanel);
+					if(!this.menu.isCalibrationMode()) {
+						try {
+							Thread.sleep(25);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				nbTour++;
+			}
+			csvExporter.exportResults(functionUsed, nbTour, this.nbAgent, this.alpha, this.size);
+			System.err.println("done iteration n : "+ currentIteration);
+			refresh(this.SaveMapContent);
+		}
 		this.gamePanel.dispose();
 	}
 	
 	public GamePanel getGamePanel(){
 		return this.gamePanel;
 	}
+	
+
 }

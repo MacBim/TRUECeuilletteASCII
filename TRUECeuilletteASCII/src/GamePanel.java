@@ -85,9 +85,18 @@ public class GamePanel extends JFrame implements Runnable{
 		this.content.removeAll();
 		this.content.repaint();
 	}
+	
+	public List getDrawables(){
+		return this.drawables;
+	}
+	
+	public void setDrawables(List drawables){
+		this.drawables = drawables;
+	}
 
 	@Override
 	public void run() {
+		System.err.println("Refresh thread started");
 		// TODO Auto-generated method stub
 		while(this.nbPatch != 0){
 			this.invalidate();

@@ -8,6 +8,8 @@ import javax.swing.JSpinner;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -20,6 +22,7 @@ import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
 
 public class MenuUI extends JFrame {
 
@@ -39,6 +42,9 @@ public class MenuUI extends JFrame {
 	private JLabel mapNameLabel;
 	private JSpinner mapSizeSelector;
 	private JSpinner startProbabilitySelector;
+	private JCheckBox chkboxCalibration;
+	private JSpinner nbIterationsSelector;
+	private JLabel nbIterationsLabel;
 
 	/**
 	 * Create the frame.
@@ -48,7 +54,7 @@ public class MenuUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 676, 408);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(135, 206, 250));
+		contentPane.setBackground(new Color(0, 191, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -124,9 +130,39 @@ public class MenuUI extends JFrame {
 		JLabel mapSizeLabel = new JLabel("Map Size");
 		mapSizeLabel.setBounds(394, 243, 46, 14);
 		contentPane.add(mapSizeLabel);
+		
+		chkboxCalibration = new JCheckBox("Calibration Mode");
+		chkboxCalibration.setBackground(new Color(0, 191, 255));
+		chkboxCalibration.setBounds(514, 141, 133, 23);
+		chkboxCalibration.addActionListener(e -> displayCalibrationInformation());
+		contentPane.add(chkboxCalibration);
+		
+		nbIterationsSelector = new JSpinner();
+		nbIterationsSelector.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		nbIterationsSelector.setBounds(514, 190, 95, 20);
+		nbIterationsSelector.setVisible(false);
+		contentPane.add(nbIterationsSelector);
+		
+		nbIterationsLabel = new JLabel("Number of iterations :");
+		nbIterationsLabel.setBounds(514, 171, 111, 14);
+		nbIterationsLabel.setVisible(false);
+		contentPane.add(nbIterationsLabel);
+		
 		this.setResizable(false);
 		this.setVisible(true);
 	}
+	
+	public void displayCalibrationInformation(){
+		if(isCalibrationMode()){
+			this.nbIterationsLabel.setVisible(true);
+			this.nbIterationsSelector.setVisible(true);
+		} else {
+			this.nbIterationsLabel.setVisible(false);
+			this.nbIterationsSelector.setVisible(false);
+		}
+	}
+	
+	
 	public void chooseMap(){
 		String path = null;
 		File f;
@@ -169,9 +205,11 @@ public class MenuUI extends JFrame {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 			GamePanel gp = new GamePanel();
 			GameEngine ge = new GameEngine(list, gp, this);
-			ge.getGamePanel().setVisible(true);
+			if(!isCalibrationMode())
+				ge.getGamePanel().setVisible(true);
 			ge.setAlpha((float) alphaSelector.getValue());
 			ge.setNbAgents((int) agentSelector.getValue());
 			ge.setFunctionUsed(getFunctionUsed());
@@ -179,8 +217,10 @@ public class MenuUI extends JFrame {
 			gameThread = new Thread(ge);
 			gameThread.start();
 			
-			refreshThread = new Thread(ge.getGamePanel());
-			refreshThread.start();
+			if(!isCalibrationMode()) {
+				refreshThread = new Thread(ge.getGamePanel());
+				refreshThread.start();
+			}
 		}
 	}
 	
@@ -191,6 +231,10 @@ public class MenuUI extends JFrame {
 		return false; // AKA Random
 	}
 	
+	public boolean isCalibrationMode(){
+		return this.chkboxCalibration.isSelected();
+	}
+	
 	public Thread getRefreshThread() {
 		return refreshThread;
 	}
@@ -199,5 +243,7 @@ public class MenuUI extends JFrame {
 		return gameThread;
 	}
 	
-	
+	public int getNbIterations(){
+		return (int) this.nbIterationsSelector.getValue();
+	}
 }
