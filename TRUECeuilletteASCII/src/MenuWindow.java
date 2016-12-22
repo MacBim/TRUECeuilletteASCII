@@ -18,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
+import javax.swing.SwingConstants;
 
 public class MenuWindow extends JFrame {
 
@@ -54,7 +55,7 @@ public class MenuWindow extends JFrame {
 		agentSelector.setBounds(57, 210, 87, 20);
 		contentPane.add(agentSelector);
 		
-		JLabel AgentSelectorLabel = new JLabel("Agents");
+		JLabel AgentSelectorLabel = new JLabel("Agents :");
 		AgentSelectorLabel.setBounds(57, 193, 87, 14);
 		contentPane.add(AgentSelectorLabel);
 		
@@ -74,13 +75,13 @@ public class MenuWindow extends JFrame {
 		alphaSelector.setBounds(57, 257, 87, 20);
 		contentPane.add(alphaSelector);
 		
-		JLabel alphaSelectorLabel = new JLabel("Alpha");
+		JLabel alphaSelectorLabel = new JLabel("Alpha :");
 		alphaSelectorLabel.setBounds(55, 236, 78, 14);
 		contentPane.add(alphaSelectorLabel);
 		
 		JLabel logoLabel = new JLabel("Smart Picking");
 		logoLabel.setFont(new Font("Tahoma", Font.PLAIN, 41));
-		logoLabel.setBounds(218, 33, 254, 84);
+		logoLabel.setBounds(235, 31, 254, 84);
 		contentPane.add(logoLabel);
 		
 		generateMapBtn = new JButton("Generate a map");
@@ -98,7 +99,7 @@ public class MenuWindow extends JFrame {
 		startProbabilitySelector.setBounds(394, 216, 78, 20);
 		contentPane.add(startProbabilitySelector);
 		
-		starProbabilityLabel = new JLabel("Patch probability");
+		starProbabilityLabel = new JLabel("Patch probability :");
 		starProbabilityLabel.setBounds(394, 193, 95, 14);
 		contentPane.add(starProbabilityLabel);
 		
@@ -117,7 +118,7 @@ public class MenuWindow extends JFrame {
 		mapSizeSelector.setBounds(394, 262, 78, 20);
 		contentPane.add(mapSizeSelector);
 		
-		JLabel mapSizeLabel = new JLabel("Map Size");
+		JLabel mapSizeLabel = new JLabel("Map Size :");
 		mapSizeLabel.setBounds(394, 243, 78, 14);
 		contentPane.add(mapSizeLabel);
 		
