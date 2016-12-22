@@ -10,7 +10,7 @@ public abstract class FormDrawable implements IDrawable {
 		this.pos = pos;
 		this.color = color;
 //		this.rect = new Rectangle(pos,dim);
-		this.rect = new Rectangle(this.pos.X, this.pos.Y, dim.height, dim.width);
+		this.rect = new Rectangle(this.pos.getX(), this.pos.getY(), dim.height, dim.width);
 	}
 	
 	public abstract void draw(Graphics g) ;

@@ -7,12 +7,19 @@ import java.util.Iterator;
 import javax.swing.*;
 
 // Also used by the refresh Thread
+/**
+ * @author Jean-Baptiste
+ *
+ */
 public class GamePanel extends JFrame implements Runnable{
 	
 	private List drawables = new LinkedList();
 	private JPanel content;
 	private int nbPatch;
 
+	/**
+	 * Builder
+	 */
 	public GamePanel(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.content = new JPanel();
@@ -21,6 +28,9 @@ public class GamePanel extends JFrame implements Runnable{
 		this.setVisible(false);
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.Window#paint(java.awt.Graphics)
+	 */
 	public void paint(Graphics g) {
 		super.paint(g);
 		for (Iterator iter = drawables.iterator(); iter.hasNext();) {
@@ -35,10 +45,19 @@ public class GamePanel extends JFrame implements Runnable{
 		}
 	}
 	
+	/**
+	 * Set the current value of patches remaining
+	 * @param nbPatch
+	 */
 	public void setNbPatch(int nbPatch){
 		this.nbPatch = nbPatch;
 	}
 	
+	/**
+	 * Verify if the rect is on an empty are (with no patches or agents)
+	 * @param rect FormDrawables used for the test
+	 * @return True if the position is empty, False otherwise
+	 */
 	public boolean isFree(Rectangle rect) {
 		for (Iterator iter = drawables.iterator(); iter.hasNext();) {
 			IDrawable element = (IDrawable) iter.next();
@@ -49,23 +68,20 @@ public class GamePanel extends JFrame implements Runnable{
 		return true;
 	}
 	
-	public void addDrawable(IDrawable d) {
+	/**
+	 * Adds a FormDrawable to the list
+	 * @param d
+	 */
+	public void addDrawable(FormDrawable d) {
 		drawables.add(d);
 	}
 	
-	public void displayGeneratedMap(IDrawable d){
-		drawables.add(d);
-		repaint();
-		try {
-			Thread.sleep(10);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
+	/**
+	 * @param pos Position to check out
+	 * @return Every Objects presents on the "pos" position
+	 */
 	public List findDrawables(Position pos) {
-		Point p = new Point(pos.X, pos.Y);
+		Point p = new Point(pos.getX(), pos.getY());
 		List l = new ArrayList();
 		for (Iterator iter = drawables.iterator(); iter.hasNext();) {
 			IDrawable element = (IDrawable) iter.next();
@@ -76,7 +92,7 @@ public class GamePanel extends JFrame implements Runnable{
 		return l;
 	}
 	
-	public void removeDrawable(IDrawable d) {
+	public void removeDrawable(FormDrawable d) {
 		drawables.remove(d);
 	}
 	
@@ -98,7 +114,7 @@ public class GamePanel extends JFrame implements Runnable{
 	public void run() {
 		System.err.println("Refresh thread started");
 		// TODO Auto-generated method stub
-		while(this.nbPatch != 0){
+		while(this.nbPatch != 0 && this.isShowing()){
 			this.invalidate();
 			this.validate();
 			this.repaint();

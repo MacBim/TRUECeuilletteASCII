@@ -13,6 +13,14 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 
+/**
+ * @author Jean-Baptiste
+ *
+ */
+/**
+ * @author Jean-Baptiste
+ *
+ */
 public class GameEngine implements Runnable {
 
 	private static final Color PATCH = Color.GREEN;
@@ -35,6 +43,12 @@ public class GameEngine implements Runnable {
 	
 	private final List SaveMapContent;
 	
+	/**
+	 * GameEngine Constructor
+	 * @param mapContent Contains the patches
+	 * @param gamePanel The actual window of the game
+	 * @param menu The MenuiUI who create it
+	 */
 	public GameEngine(List mapContent, GamePanel gamePanel, MenuUI menu){
 		this.SaveMapContent = mapContent;
 		this.gamePanel = gamePanel;
@@ -44,7 +58,7 @@ public class GameEngine implements Runnable {
 				this.size = (int) mapContent.get(i);
 			} else {
 				Position tmp = (Position) mapContent.get(i);
-				IDrawable patch = new RectangleDrawable(PATCH, new Position(tmp.X*SCALE, tmp.Y*SCALE), new Dimension(10, 10));
+				FormDrawable patch = new RectangleDrawable(PATCH, new Position(tmp.getX()*SCALE, tmp.getY()*SCALE), new Dimension(10, 10));
 				gamePanel.addDrawable(patch);
 				this.nbPatch++;
 				
@@ -53,21 +67,21 @@ public class GameEngine implements Runnable {
 		gamePanel.setNbPatch(this.nbPatch);
 	}
 
+	/**
+	 * Refresh the FormDrawables of the agent and the patches (if needed)
+	 * @param agent Agent who was moved
+	 * @param oldPos Last position of the agent
+	 */
 	void putAgent(Agent agent, Position oldPos){
 		if(oldPos != null){
 			List ltmp = this.gamePanel.findDrawables(oldPos);
-			if(ltmp == null){
-				System.out.println("null");
-			}
 			for(int i = 0; i < ltmp.size(); i++){
 				FormDrawable form = (FormDrawable) ltmp.get(i);
 				this.gamePanel.removeDrawable(form);
 			}
 		}
 		
-		
 		Position posAgent = agent.getPosition();
-		//System.out.println(posAgent.X+"  "+posAgent.Y);
 
 		FormDrawable agentRect = new RectangleDrawable(AGENT, posAgent, new Dimension(10, 10));
 		
@@ -94,22 +108,40 @@ public class GameEngine implements Runnable {
 
 	}
 
+	/**
+	 * @return Size of the map
+	 */
 	public int getSize(){
 		return this.size;
 	}
 	
+	/**
+	 * Set the current number of agent to nbAgents's value
+	 * @param nbAgents Number of agents
+	 */
 	public void setNbAgents(int nbAgents) {
 		this.nbAgent = nbAgents;
 	}
 
+	/** Set the current value for alpha
+	 * @param alpha
+	 */
 	public void setAlpha(float alpha) {
 		this.alpha = alpha;
 	}
 	
+	/**
+	 * Set the current function being used
+	 * @param functionUsed
+	 */
 	public void setFunctionUsed(boolean functionUsed) {
 		this.functionUsed = functionUsed;
 	}
 	
+	/**
+	 * Refresh the GameEngine to it's default state ( a the start of a new game )
+	 * @param mapContent Contains the patches
+	 */
 	public void refresh(List mapContent){
 		this.nbPatch = 0;
 		this.nbTours = 0;
@@ -121,7 +153,7 @@ public class GameEngine implements Runnable {
 				this.size = (int) mapContent.get(i);
 			} else {
 				Position tmp = (Position) mapContent.get(i);
-				IDrawable patch = new RectangleDrawable(PATCH, new Position(tmp.X*SCALE, tmp.Y*SCALE), new Dimension(10, 10));
+				FormDrawable patch = new RectangleDrawable(PATCH, new Position(tmp.getX()*SCALE, tmp.getY()*SCALE), new Dimension(10, 10));
 				gamePanel.addDrawable(patch);
 				this.nbPatch++;
 				
@@ -130,21 +162,22 @@ public class GameEngine implements Runnable {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		System.out.println("Mode normal");
 		System.out.println("Nombre agents " +nbAgent);
 		System.out.println("Valeur de l'alpha " +(float) alpha);
 		
 		int start;
-		if(!this.menu.isCalibrationMode()){
+		if(!this.menu.isCalibrationModeEnabled()){
 			// pour au moin le faire une fois 
 			start = -1;
 		} else {
 			start = 0;
 		}
-		CSVFileWriter csvExporter = new CSVFileWriter();
+		CSVResultsExporter csvExporter = new CSVResultsExporter();
 		for(int currentIteration = start ; currentIteration < this.menu.getNbIterations(); currentIteration++ ){
 			
 			Agent[] agents = new Agent[nbAgent];
@@ -163,7 +196,7 @@ public class GameEngine implements Runnable {
 						agents[i].moveLevy(this,alpha,gamePanel);
 					else
 						agents[i].moveRandom(this,gamePanel);
-					if(!this.menu.isCalibrationMode()) {
+					if(!this.menu.isCalibrationModeEnabled()) {
 						try {
 							Thread.sleep(25);
 						} catch (InterruptedException e) {
@@ -181,6 +214,9 @@ public class GameEngine implements Runnable {
 		this.gamePanel.dispose();
 	}
 	
+	/**
+	 * @return The GamePanel attached to the current GameEngine
+	 */
 	public GamePanel getGamePanel(){
 		return this.gamePanel;
 	}

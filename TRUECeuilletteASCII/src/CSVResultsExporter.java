@@ -2,7 +2,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class CSVFileWriter {
+public class CSVResultsExporter {
 
 	public void exportResults(boolean functionUsed, int nbTours, int nbAgent, float alpha, int size){
 		System.err.println("Exporting..");
@@ -11,9 +11,10 @@ public class CSVFileWriter {
 			// test pour savoir si results.txt existe déja
 			File f = new File("results.csv");
 			if(f.exists() && !f.isDirectory()) {
+				// si il existe on l'ouvre
 				fileWriter = new FileWriter("results.csv",true);
-			    // do something
 			} else {
+				// sinon on le créer
 				fileWriter = new FileWriter(new File("results.csv"));
 				fileWriter.append("nbTours,nbAgents,alpha,taille_map,fonctionUsed");
 				fileWriter.append('\n');

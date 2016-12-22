@@ -1,8 +1,8 @@
 
 public class Position {
 	
-	int X; // X coordinate
-	int Y; // Y coordinate
+	private int X; // X coordinate
+	private int Y; // Y coordinate
 	
 	public Position(int x, int y) {
 		X = x;

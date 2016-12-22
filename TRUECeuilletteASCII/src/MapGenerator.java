@@ -14,6 +14,11 @@ import java.util.Random;
 
 public class MapGenerator {
 
+	/**
+	 * @param size size of the line (in char)
+	 * @param starProbability
+	 * @return
+	 */
 	String getLine(int size, double starProbability)
 	/*
 	 * This function is used to create and return a string with a lenght of
@@ -51,7 +56,7 @@ public class MapGenerator {
 	public String generateMap(int size, double starProba) throws IOException {
 		String newLine = "";
 		BufferedWriter bfwrtr = null;
-		File f = new File("./map12345.txt");
+		File f = new File("./generatedMap.txt");
 		try {
 			bfwrtr = new BufferedWriter(new FileWriter(f,false));
 

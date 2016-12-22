@@ -26,14 +26,9 @@ import javax.swing.JCheckBox;
 
 public class MenuUI extends JFrame {
 
-	private Thread refreshThread;
-	private Thread gameThread;
-	
-	private GameEngine ge;
 	private JPanel contentPane;
 	private JButton generateMapBtn;
-	private JButton startBtn;
-	private JButton openMapBtn;
+	//private JButton openMapBtn;
 	private JSpinner agentSelector;
 	private JSpinner alphaSelector;
 	private JLabel starProbabilityLabel;
@@ -68,19 +63,19 @@ public class MenuUI extends JFrame {
 		AgentSelectorLabel.setBounds(57, 193, 87, 14);
 		contentPane.add(AgentSelectorLabel);
 		
-		startBtn = new JButton("Start");
+		JButton startBtn = new JButton("Start");
 		startBtn.setBounds(235, 141, 133, 23);
 		startBtn.addActionListener(e -> start());
 		contentPane.add(startBtn);
 		
-		openMapBtn = new JButton("Open a map");
+		JButton openMapBtn = new JButton("Open a map");
 		openMapBtn.setBounds(235, 309, 133, 23);
 		openMapBtn.addActionListener(e -> chooseMap());
 		contentPane.add(openMapBtn);
 		
 		alphaSelector = new JSpinner();
 		alphaSelector.setToolTipText("");
-		alphaSelector.setModel(new SpinnerNumberModel(new Float(0), new Float(0), new Float(2), new Float(0.01)));
+		alphaSelector.setModel(new SpinnerNumberModel(new Float(0.5), new Float(0), new Float(2), new Float(0.01)));
 		alphaSelector.setBounds(57, 257, 87, 20);
 		contentPane.add(alphaSelector);
 		
@@ -153,7 +148,7 @@ public class MenuUI extends JFrame {
 	}
 	
 	public void displayCalibrationInformation(){
-		if(isCalibrationMode()){
+		if(isCalibrationModeEnabled()){
 			this.nbIterationsLabel.setVisible(true);
 			this.nbIterationsSelector.setVisible(true);
 		} else {
@@ -167,6 +162,7 @@ public class MenuUI extends JFrame {
 		String path = null;
 		File f;
 		JFileChooser mapChooser = new JFileChooser();
+		mapChooser.setCurrentDirectory(new File("."));
 		if(mapChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
 			f = mapChooser.getSelectedFile();
 			path = f.getPath();
@@ -208,17 +204,17 @@ public class MenuUI extends JFrame {
 			
 			GamePanel gp = new GamePanel();
 			GameEngine ge = new GameEngine(list, gp, this);
-			if(!isCalibrationMode())
+			if(!isCalibrationModeEnabled())
 				ge.getGamePanel().setVisible(true);
 			ge.setAlpha((float) alphaSelector.getValue());
 			ge.setNbAgents((int) agentSelector.getValue());
 			ge.setFunctionUsed(getFunctionUsed());
 			
-			gameThread = new Thread(ge);
+			Thread gameThread = new Thread(ge);
 			gameThread.start();
 			
-			if(!isCalibrationMode()) {
-				refreshThread = new Thread(ge.getGamePanel());
+			if(!isCalibrationModeEnabled()) {
+				Thread refreshThread = new Thread(ge.getGamePanel());
 				refreshThread.start();
 			}
 		}
@@ -231,16 +227,8 @@ public class MenuUI extends JFrame {
 		return false; // AKA Random
 	}
 	
-	public boolean isCalibrationMode(){
+	public boolean isCalibrationModeEnabled(){
 		return this.chkboxCalibration.isSelected();
-	}
-	
-	public Thread getRefreshThread() {
-		return refreshThread;
-	}
-	
-	public Thread getGameThread() {
-		return gameThread;
 	}
 	
 	public int getNbIterations(){
