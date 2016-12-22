@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -171,6 +172,7 @@ public class GameEngine implements Runnable {
 		System.out.println("Valeur de l'alpha " +(float) alpha);
 		
 		int start;
+		int nbTour = 0;
 		if(!this.menu.isCalibrationModeEnabled()){
 			// pour au moin le faire une fois 
 			start = -1;
@@ -189,7 +191,7 @@ public class GameEngine implements Runnable {
 				this.putAgent(agents[i],null);
 			}
 			
-			int nbTour = 0;
+			nbTour = 0;
 			while(nbPatch != 0){
 				for(int i = 0;i<nbAgent;i++){
 					if(functionUsed)
@@ -209,9 +211,15 @@ public class GameEngine implements Runnable {
 			}
 			csvExporter.exportResults(functionUsed, nbTour, this.nbAgent, this.alpha, this.size);
 			System.err.println("done iteration n : "+ currentIteration);
-			refresh(this.SaveMapContent);
+			if(this.menu.isCalibrationModeEnabled())
+				refresh(this.SaveMapContent);
 		}
+		if(!this.menu.isCalibrationModeEnabled())
+			JOptionPane.showMessageDialog(null,"Done in " + nbTour + " run(s).");
+		else 
+			JOptionPane.showMessageDialog(null,"Done. Results are exported.");
 		this.gamePanel.dispose();
+		
 	}
 	
 	/**
