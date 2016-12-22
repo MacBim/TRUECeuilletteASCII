@@ -1,22 +1,17 @@
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JSpinner;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import javax.swing.SwingConstants;
 import javax.swing.SpinnerNumberModel;
 import java.awt.Color;
 import javax.swing.JComboBox;
@@ -24,7 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 
-public class MenuUI extends JFrame {
+public class MenuWindow extends JFrame {
 
 	private JPanel contentPane;
 	private JButton generateMapBtn;
@@ -44,10 +39,10 @@ public class MenuUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MenuUI() {
+	public MenuWindow() {
 		setTitle("Projet");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 676, 408);
+		setBounds(100, 100, 713, 434);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(0, 191, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -95,7 +90,7 @@ public class MenuUI extends JFrame {
 		
 		mapNameLabel = new JLabel("No map selected");
 		mapNameLabel.setEnabled(false);
-		mapNameLabel.setBounds(394, 313, 95, 14);
+		mapNameLabel.setBounds(394, 313, 149, 14);
 		contentPane.add(mapNameLabel);
 		
 		startProbabilitySelector = new JSpinner();
@@ -123,7 +118,7 @@ public class MenuUI extends JFrame {
 		contentPane.add(mapSizeSelector);
 		
 		JLabel mapSizeLabel = new JLabel("Map Size");
-		mapSizeLabel.setBounds(394, 243, 46, 14);
+		mapSizeLabel.setBounds(394, 243, 78, 14);
 		contentPane.add(mapSizeLabel);
 		
 		chkboxCalibration = new JCheckBox("Calibration Mode");
@@ -134,12 +129,12 @@ public class MenuUI extends JFrame {
 		
 		nbIterationsSelector = new JSpinner();
 		nbIterationsSelector.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
-		nbIterationsSelector.setBounds(514, 190, 95, 20);
+		nbIterationsSelector.setBounds(514, 190, 133, 20);
 		nbIterationsSelector.setVisible(false);
 		contentPane.add(nbIterationsSelector);
 		
 		nbIterationsLabel = new JLabel("Number of iterations :");
-		nbIterationsLabel.setBounds(514, 171, 111, 14);
+		nbIterationsLabel.setBounds(514, 171, 133, 14);
 		nbIterationsLabel.setVisible(false);
 		contentPane.add(nbIterationsLabel);
 		
@@ -163,6 +158,9 @@ public class MenuUI extends JFrame {
 		File f;
 		JFileChooser mapChooser = new JFileChooser();
 		mapChooser.setCurrentDirectory(new File("."));
+		// To only accept .txt files
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+		mapChooser.setFileFilter(filter);
 		if(mapChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
 			f = mapChooser.getSelectedFile();
 			path = f.getPath();

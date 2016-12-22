@@ -39,7 +39,7 @@ public class GameEngine implements Runnable {
 	
 	public int nbPatch;
 	public int nbTours;
-	private MenuUI menu;
+	private MenuWindow menu;
 	
 	private final List SaveMapContent;
 	
@@ -49,7 +49,7 @@ public class GameEngine implements Runnable {
 	 * @param gamePanel The actual window of the game
 	 * @param menu The MenuiUI who create it
 	 */
-	public GameEngine(List mapContent, GamePanel gamePanel, MenuUI menu){
+	public GameEngine(List mapContent, GamePanel gamePanel, MenuWindow menu){
 		this.SaveMapContent = mapContent;
 		this.gamePanel = gamePanel;
 		this.menu = menu;
